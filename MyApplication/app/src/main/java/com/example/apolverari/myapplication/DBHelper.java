@@ -16,7 +16,7 @@ public class DBHelper extends SQLiteOpenHelper{
     private static final String CREATE_QUERY =
             "CREATE TABLE " + TABLE_NAME + " (" +
                     FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    FIELD_TITLE + " TEXT" +
+                    FIELD_TITLE + " TEXT, " +
                     FIELD_CONTENT + " TEXT " + ");";
 
     public DBHelper(Context context) {

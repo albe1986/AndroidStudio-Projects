@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
-import android.database.sqlite.SQLiteOpenHelper;
 
 /**
  * Created by a.polverari on 18/04/2016.
@@ -18,7 +17,7 @@ public class DBManager {
         dbhelper = new DBHelper(ctx);
     }
 
-    public void save(Nota n){
+    public boolean save(Nota n){
         SQLiteDatabase db = dbhelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(DBHelper.FIELD_TITLE, n.getTitolo());
@@ -26,9 +25,11 @@ public class DBManager {
         try {
             db.insert(DBHelper.TABLE_NAME, null, cv);
         } catch (SQLiteException e){
+            return false;
         } finally {
             db.close();
         }
+        return true;
     }
 
     public boolean delete(Nota n){
@@ -52,7 +53,6 @@ public class DBManager {
             crs = db.query(DBHelper.TABLE_NAME, null, null, null, null, null, null, null);
         } catch (SQLiteException e){
             return null;
-        } finally {
         }
         return crs;
     }

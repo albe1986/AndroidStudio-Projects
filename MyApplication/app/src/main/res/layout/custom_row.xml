@@ -8,7 +8,9 @@
         android:id="@+id/textViewTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="" />
+        android:text=""
+        android:textStyle="bold"
+        android:textSize="15pt"/>
 
     <TextView
         android:id="@+id/textViewContent"
@@ -16,6 +18,8 @@
         android:layout_height="wrap_content"
         android:text=""
         android:textColor="#00AA00"
+        android:textStyle="italic"
+        android:textSize="10pt"
         />
 
 </LinearLayout>
