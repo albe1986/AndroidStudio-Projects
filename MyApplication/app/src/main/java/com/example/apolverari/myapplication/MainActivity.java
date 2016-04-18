@@ -20,6 +20,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), EditNoteActivity.class);
+                Nota item = (Nota) parent.getItemAtPosition(position);
+                Bundle b = new Bundle();
+                b.putSerializable("nota", item);
+                intent.putExtras(b);
+                startActivity(intent);
             }
         });
         Nota[] n = new Nota[note.size()];

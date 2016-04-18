@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Created by a.polverari on 14/04/2016.
  */
 
-public class Nota {
+public class Nota implements java.io.Serializable{
     private String titolo;
     private String contenuto;
 
