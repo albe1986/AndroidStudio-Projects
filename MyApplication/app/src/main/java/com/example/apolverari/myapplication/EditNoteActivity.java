@@ -17,10 +17,16 @@ public class EditNoteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_note);
         TextView tv = (TextView) findViewById(R.id.title_tv);
         EditText et = (EditText) findViewById(R.id.content);
-        Nota n = (Nota)getIntent().getExtras().getSerializable("nota");
+        Nota n = null;
+        if (getIntent().getExtras() != null) {
+            n = (Nota) getIntent().getExtras().getSerializable("nota");
+        }
         if (n != null){
             tv.setText(n.getTitolo());
             et.setText(n.getContenuto());
+        } else {
+            tv.setText("NuovaNota");
+            et.setText("Inserire testoS");
         }
     }
 
