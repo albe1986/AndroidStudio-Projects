@@ -46,7 +46,10 @@ public class EditNoteActivity extends AppCompatActivity {
                 boolean result = db.save(n);
                 if (result){
                     Toast.makeText(EditNoteActivity.this, "Nota salvata correttamente.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(EditNoteActivity.this, "Errore durante il salvataggio della nota.", Toast.LENGTH_SHORT).show();
                 }
+                finish();
             }
         });
     }

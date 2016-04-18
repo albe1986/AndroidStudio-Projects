@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private DBManager db = null;
     private Cursor crs = null;
     private static Nota item = null;
+    NoteAdapter na = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +78,13 @@ public class MainActivity extends AppCompatActivity {
                                 } else {
                                     Toast.makeText(MainActivity.this, "Errore durante la cancellazione della nota.", Toast.LENGTH_SHORT).show();
                                 }
+                                if (na.getCount()==1){
+                                    finish();
+                                    startActivity(getIntent());
+                                } else {
+                                    setItemList();
+                                }
+
                             }
                         })
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -101,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 0; i < note.size(); i++) {
                 n[i] = note.get(i);
             }
-            NoteAdapter na = new NoteAdapter(this, R.layout.custom_row, n);
+            na = new NoteAdapter(this, R.layout.custom_row, n);
             lview.setAdapter(na);
         }
 
