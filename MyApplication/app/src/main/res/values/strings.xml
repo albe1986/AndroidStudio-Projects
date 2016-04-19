@@ -3,4 +3,5 @@
     <string name="title_activity_edit_note">EditNoteActivity</string>
     <string name="edit_titolo">Titolo</string>
     <string name="edit_testo_nota">Testo nota</string>
+    <string name="action_delete">delete_button</string>
 </resources>
