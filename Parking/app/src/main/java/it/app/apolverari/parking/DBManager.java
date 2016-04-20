@@ -34,8 +34,8 @@ public class DBManager {
         return true;
     }
 
-    public boolean delete(String titolo, String coordinate, String note, String data){
-        String id = getIdPark(titolo, coordinate, note, data);
+    public boolean delete(String titolo, String coordinate, String note){
+        String id = getIdPark(titolo, coordinate, note);
         SQLiteDatabase db = dbhelper.getWritableDatabase();
         try {
             int recordDeleted = db.delete(DBHelper.TABLE_NAME, DBHelper.FIELD_ID + "=?", new String[]{id});
@@ -59,7 +59,7 @@ public class DBManager {
         return crs;
     }
 
-    public String getIdPark(String titolo, String coordinate, String note, String data){
+    public String getIdPark(String titolo, String coordinate, String note){
         Cursor crs = null;
         Integer id = 0;
         SQLiteDatabase db = null;
@@ -68,8 +68,7 @@ public class DBManager {
             crs = db.rawQuery("SELECT * FROM " + DBHelper.TABLE_NAME +
                     " WHERE " + DBHelper.FIELD_TITLE + " = '" + titolo + "'" +
                     " AND " + DBHelper.FIELD_CONTENT + " = '" + coordinate + "'" +
-                    " AND " + DBHelper.FIELD_CONTENT + " = '" + note + "'" +
-                    " AND " + DBHelper.FIELD_CONTENT + " = '" + data + "'", null);
+                    " AND " + DBHelper.FIELD_CONTENT + " = '" + note + "'", null);
             if (crs.moveToFirst()) {
                 id = crs.getInt(0);
             }
