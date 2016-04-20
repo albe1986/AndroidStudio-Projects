@@ -3,6 +3,8 @@ package it.app.apolverari.parking;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 import org.w3c.dom.Text;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,10 +24,10 @@ import java.util.List;
  */
 public class CustomAdapter extends BaseAdapter{
 
-    private List<Parking> parkings = null;
+    private ArrayList<Parking> parkings = null;
     private Context ctx = null;
 
-    public CustomAdapter(Context context, List<Parking> parkings) {
+    public CustomAdapter(Context context, ArrayList<Parking> parkings) {
         this.parkings = parkings;
         this.ctx = context;
     }

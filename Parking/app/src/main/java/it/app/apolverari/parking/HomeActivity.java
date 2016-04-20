@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity
@@ -48,7 +49,7 @@ public class HomeActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         ActivityCompat.requestPermissions( this, new String[] {  android.Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION  }, 1 );
 
-
+        setParkingist();
     }
 
     @Override
@@ -110,9 +111,10 @@ public class HomeActivity extends AppCompatActivity
 
     public void setParkingist(){
         ListView listView = (ListView)findViewById(R.id.listView);
-        List<Parking> lp = null;
-
+        ArrayList<Parking> lp = new ArrayList<Parking>();
+        Parking p = new Parking("24/03/2016", "Via Grimaldi", "C:\\Firma.jpg");
+        lp.add(p);
         CustomAdapter c = new CustomAdapter(this, lp);
-
+        listView.setAdapter(c);
     }
 }
