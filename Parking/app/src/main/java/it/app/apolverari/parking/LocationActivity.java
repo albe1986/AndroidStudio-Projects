@@ -193,7 +193,6 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
     }
 
     private File createImageFile() throws IOException {
-        // Create an image file name
         String timeStamp = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
         EditText title = (EditText) findViewById(R.id.park_title);
         String imageFileName = "Parking_" + timeStamp + "_" + title.getText().toString();
@@ -203,9 +202,7 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
                 imageFileName,  // prefix
                 ".jpg",         // suffix
                 storageDir      // directory
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
+                );
         picPath = "file:" + image.getAbsolutePath();
         return image;
     }

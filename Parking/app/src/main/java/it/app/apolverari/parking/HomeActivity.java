@@ -2,9 +2,9 @@ package it.app.apolverari.parking;
 
 import android.Manifest;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -18,10 +18,13 @@ import android.view.MenuItem;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private DBManager db = null;
+    private Cursor crs = null;
+    CustomAdapter c = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,8 @@ public class HomeActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+        db = new DBManager(this);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -116,9 +121,16 @@ public class HomeActivity extends AppCompatActivity
     public void setParkingist(){
         ListView listView = (ListView)findViewById(R.id.listView);
         ArrayList<Parking> lp = new ArrayList<Parking>();
-        Parking p = new Parking("24/03/2016", "Via Grimaldi", "file:/storage/emulated/0/Pictures/Parking_21-04-2016_-1069710650.jpg");
-        lp.add(p);
-        CustomAdapter c = new CustomAdapter(this, lp);
+        crs = db.getAll();
+        if (crs != null && crs.getCount() > 0) {
+            if (crs.moveToFirst()) {
+                do {
+                    Parking park = new Parking(crs.getString(5), crs.getString(1), crs.getString(4));
+                    lp.add(park);
+                } while (crs.moveToNext());
+            }
+            c = new CustomAdapter(this, lp);
+        }
         listView.setAdapter(c);
     }
 }
