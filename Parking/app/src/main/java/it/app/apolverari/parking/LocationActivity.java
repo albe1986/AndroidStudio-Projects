@@ -1,11 +1,17 @@
 package it.app.apolverari.parking;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -19,9 +25,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -35,6 +41,9 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
     private Double latitude, longitude;
     private List<android.location.Address> addresses;
     private String address;
+    private static final int REQUEST_CODE = 1;
+    private Bitmap pic;
+    private String picPath = "";
 
     @SuppressLint("NewApi")
     @Override
@@ -139,7 +148,11 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
                 EditText notes = (EditText) findViewById(R.id.park_note);
                 String coordinate = latitude.toString() + ":" + longitude.toString();
                 String data = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
-                db.save(title.getText().toString(), coordinate, notes.getText().toString(), data);
+                db.save(title.getText().toString(),
+                        coordinate,
+                        notes.getText().toString(),
+                        picPath,
+                        data);
             }
         });
 
@@ -157,7 +170,54 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
             }
         });
 
+        pic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+                    // Create the File where the photo should go
+                    File photoFile = null;
+                    try {
+                        photoFile = createImageFile();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                    // Continue only if the File was successfully created
+                    if (photoFile != null) {
+                        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                        startActivityForResult(cameraIntent, 1);
+                    }
+                }
+            }
+        });
     }
 
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+        EditText title = (EditText) findViewById(R.id.park_title);
+        String imageFileName = "Parking_" + timeStamp + "_" + title.getText().toString();
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  // prefix
+                ".jpg",         // suffix
+                storageDir      // directory
+        );
 
+        // Save a file: path for use with ACTION_VIEW intents
+        picPath = "file:" + image.getAbsolutePath();
+        return image;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK){
+            try {
+                pic = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(picPath));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

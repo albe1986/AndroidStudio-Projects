@@ -1,11 +1,15 @@
 package it.app.apolverari.parking;
 
+import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +20,7 @@ import android.widget.TextView;
 import org.w3c.dom.Text;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,8 +63,11 @@ public class CustomAdapter extends BaseAdapter{
         TextView park_address = (TextView) v.findViewById(R.id.park_address);
         park_address.setText(p.getAddress());
         ImageView pic = (ImageView) v.findViewById(R.id.park_pic);
-        File imageFile = new  File(p.getPic());
-        pic.setImageBitmap(BitmapFactory.decodeFile(imageFile.getAbsolutePath()));
+        try {
+            pic.setImageBitmap(MediaStore.Images.Media.getBitmap(ctx.getContentResolver(), Uri.parse(p.getPic())));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return v;
     }
 }

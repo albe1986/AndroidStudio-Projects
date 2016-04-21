@@ -14,6 +14,7 @@ public class DBHelper extends SQLiteOpenHelper{
     public static final String FIELD_TITLE = "titolo";
     public static final String FIELD_CONTENT = "coordinate";
     public static final String FIELD_NOTES = "note";
+    public static final String FIELD_PIC = "picture";
     public static final String FIELD_DATE = "data";
     private static final String CREATE_QUERY =
             "CREATE TABLE " + TABLE_NAME + " (" +
@@ -21,6 +22,7 @@ public class DBHelper extends SQLiteOpenHelper{
                     FIELD_TITLE + " TEXT, " +
                     FIELD_NOTES + " TEXT, " +
                     FIELD_CONTENT + " TEXT, " +
+                    FIELD_PIC + " TEXT, " +
                     FIELD_DATE + " TEXT " + ");";
 
     public DBHelper(Context context) {

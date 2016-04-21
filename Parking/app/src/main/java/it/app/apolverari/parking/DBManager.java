@@ -17,12 +17,13 @@ public class DBManager {
         dbhelper = new DBHelper(ctx);
     }
 
-    public boolean save(String titolo, String coordinate, String note, String data){
+    public boolean save(String titolo, String coordinate, String note, String picPath, String data){
         SQLiteDatabase db = dbhelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(DBHelper.FIELD_TITLE, titolo);
         cv.put(DBHelper.FIELD_CONTENT, coordinate);
         cv.put(DBHelper.FIELD_NOTES, note);
+        cv.put(DBHelper.FIELD_PIC, picPath);
         cv.put(DBHelper.FIELD_DATE, data);
         try {
             db.insert(DBHelper.TABLE_NAME, null, cv);

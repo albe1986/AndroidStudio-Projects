@@ -47,7 +47,11 @@ public class HomeActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        ActivityCompat.requestPermissions( this, new String[] {  android.Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION  }, 1 );
+        ActivityCompat.requestPermissions( this, new String[] {
+                android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.CAMERA,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1 );
 
         setParkingist();
     }
@@ -112,7 +116,7 @@ public class HomeActivity extends AppCompatActivity
     public void setParkingist(){
         ListView listView = (ListView)findViewById(R.id.listView);
         ArrayList<Parking> lp = new ArrayList<Parking>();
-        Parking p = new Parking("24/03/2016", "Via Grimaldi", "C:\\Firma.jpg");
+        Parking p = new Parking("24/03/2016", "Via Grimaldi", "file:/storage/emulated/0/Pictures/Parking_21-04-2016_-1069710650.jpg");
         lp.add(p);
         CustomAdapter c = new CustomAdapter(this, lp);
         listView.setAdapter(c);
