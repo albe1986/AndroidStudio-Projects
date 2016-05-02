@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -132,6 +133,17 @@ public class HomeActivity extends AppCompatActivity
             c = new CustomAdapter(this, lp);
         }
         listView.setAdapter(c);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent i = new Intent(getApplicationContext(), LocationActivity.class);
+                Parking p = (Parking) parent.getItemAtPosition(position);
+                Bundle b = new Bundle();
+                b.putSerializable("park", p);
+                i.putExtras(b);
+                startActivity(i);
+            }
+        });
     }
 
     @Override

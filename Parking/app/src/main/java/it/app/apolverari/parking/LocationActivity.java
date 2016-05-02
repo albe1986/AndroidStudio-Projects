@@ -1,22 +1,16 @@
 package it.app.apolverari.parking;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -27,7 +21,6 @@ import android.widget.EditText;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -46,7 +39,6 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
 
     private GoogleMap mMap;
     private DBManager db;
-    private LocationManager locationManager;
     private Geocoder g;
     private Double latitude, longitude;
     private List<android.location.Address> addresses;
@@ -62,61 +54,21 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         buildGoogleApiClient();
         if (mGoogleApiClient != null) {
             mGoogleApiClient.connect();
         }
-        try {
-            //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 0, this);
-        } catch (SecurityException e) {
-            Toast.makeText(LocationActivity.this, "Attenzione: permessi di localizzaizione non concessi", Toast.LENGTH_SHORT).show();
-        }
         g = new Geocoder(this, Locale.getDefault());
         db = new DBManager(this);
         setButtons();
+        Intent i  = getIntent();
+        Parking p = (Parking) i.getExtras().get("park");
+        String coordinate = db.getCoordinate(p.getAddress(), p.getDate(), "");
     }
-//
-//    @Override
-//    public void onLocationChanged(Location location) {
-//        latitude = location.getLatitude();
-//        longitude = location.getLongitude();
-//        if (latitude != null && longitude != null) {
-//            LatLng coordinate = new LatLng(latitude, longitude);
-//            mMap.addMarker(new MarkerOptions().position(coordinate).title("Your Car"));
-//            mMap.moveCamera(CameraUpdateFactory.newLatLng(coordinate));
-//            mMap.animateCamera( CameraUpdateFactory.zoomTo( 17.0f ) );
-//            try {
-//                addresses = g.getFromLocation(latitude,longitude, 10);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            EditText et = (EditText) findViewById(R.id.park_title);
-//            if (!addresses.isEmpty()) {
-//                address = addresses.get(0).getAddressLine(0) + ", " +
-//                        addresses.get(0).getLocality() + ", " +
-//                        addresses.get(0).getCountryName() + ", " +
-//                        addresses.get(0).getPostalCode();
-//                et.setText(address);
-//            } else {
-//                et.setText("NewParking");
-//            }
-//        }
-//    }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -235,8 +187,10 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
     public void onConnected(@Nullable Bundle bundle) {
         try {
             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-            latitude = mLastLocation.getLatitude();
-            longitude = mLastLocation.getLongitude();
+            if (mLastLocation != null) {
+                latitude = mLastLocation.getLatitude();
+                longitude = mLastLocation.getLongitude();
+            }
             if (latitude != null && longitude != null) {
                 LatLng coordinate = new LatLng(latitude, longitude);
                 mMap.addMarker(new MarkerOptions().position(coordinate).title("Your Car"));

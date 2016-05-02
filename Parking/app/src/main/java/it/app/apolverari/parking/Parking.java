@@ -1,9 +1,11 @@
 package it.app.apolverari.parking;
 
+import java.io.Serializable;
+
 /**
  * Created by a.polverari on 20/04/2016.
  */
-public class Parking {
+public class Parking implements Serializable {
 
     private String date;
     private String address;

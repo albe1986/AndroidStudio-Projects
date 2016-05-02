@@ -69,7 +69,7 @@ public class DBManager {
             crs = db.rawQuery("SELECT * FROM " + DBHelper.TABLE_NAME +
                     " WHERE " + DBHelper.FIELD_TITLE + " = '" + titolo + "'" +
                     " AND " + DBHelper.FIELD_CONTENT + " = '" + coordinate + "'" +
-                    " AND " + DBHelper.FIELD_CONTENT + " = '" + note + "'", null);
+                    " AND " + DBHelper.FIELD_NOTES + " = '" + note + "'", null);
             if (crs.moveToFirst()) {
                 id = crs.getInt(0);
             }
@@ -79,5 +79,26 @@ public class DBManager {
             db.close();
         }
         return id.toString();
+    }
+
+    public String getCoordinate(String titolo, String data, String note){
+        Cursor crs = null;
+        String coordinate = "";
+        SQLiteDatabase db = null;
+        try {
+            db = dbhelper.getReadableDatabase();
+            crs = db.rawQuery("SELECT * FROM " + DBHelper.TABLE_NAME +
+                    " WHERE " + DBHelper.FIELD_TITLE + " = '" + titolo + "'" +
+                    " AND " + DBHelper.FIELD_DATE + " = '" + data + "'" +
+                    " AND " + DBHelper.FIELD_NOTES + " = '" + note + "'", null);
+            if (crs.moveToFirst()) {
+                coordinate = crs.getString(3);
+            }
+        } catch (SQLiteException e){
+        } finally {
+            crs.close();
+            db.close();
+        }
+        return coordinate;
     }
 }
