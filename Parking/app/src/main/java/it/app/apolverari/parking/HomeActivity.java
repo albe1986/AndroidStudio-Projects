@@ -133,4 +133,10 @@ public class HomeActivity extends AppCompatActivity
         }
         listView.setAdapter(c);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setParkingist();
+    }
 }

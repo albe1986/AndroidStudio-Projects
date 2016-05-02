@@ -1,9 +1,11 @@
 package it.app.apolverari.parking;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Geocoder;
 import android.location.Location;
@@ -12,12 +14,20 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 import android.widget.EditText;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -32,7 +42,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class LocationActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
+public class LocationActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private GoogleMap mMap;
     private DBManager db;
@@ -44,6 +54,8 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
     private static final int REQUEST_CODE = 1;
     private Bitmap pic;
     private String picPath = "";
+    GoogleApiClient mGoogleApiClient;
+    Location mLastLocation;
 
     @SuppressLint("NewApi")
     @Override
@@ -55,58 +67,46 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        buildGoogleApiClient();
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
+        }
         try {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-            locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        } catch (SecurityException e){
+            //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 0, this);
+        } catch (SecurityException e) {
             Toast.makeText(LocationActivity.this, "Attenzione: permessi di localizzaizione non concessi", Toast.LENGTH_SHORT).show();
         }
         g = new Geocoder(this, Locale.getDefault());
         db = new DBManager(this);
         setButtons();
     }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        latitude = location.getLatitude();
-        longitude = location.getLongitude();
-        if (latitude != null && longitude != null) {
-            LatLng coordinate = new LatLng(latitude, longitude);
-            mMap.addMarker(new MarkerOptions().position(coordinate).title("Your Car"));
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(coordinate));
-            mMap.animateCamera( CameraUpdateFactory.zoomTo( 17.0f ) );
-            try {
-                addresses = g.getFromLocation(latitude,longitude, 10);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            EditText et = (EditText) findViewById(R.id.park_title);
-            if (!addresses.isEmpty()) {
-                address = addresses.get(0).getAddressLine(0) + ", " +
-                        addresses.get(0).getLocality() + ", " +
-                        addresses.get(0).getCountryName() + ", " +
-                        addresses.get(0).getPostalCode();
-                et.setText(address);
-            } else {
-                et.setText("NewParking");
-            }
-        }
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
+//
+//    @Override
+//    public void onLocationChanged(Location location) {
+//        latitude = location.getLatitude();
+//        longitude = location.getLongitude();
+//        if (latitude != null && longitude != null) {
+//            LatLng coordinate = new LatLng(latitude, longitude);
+//            mMap.addMarker(new MarkerOptions().position(coordinate).title("Your Car"));
+//            mMap.moveCamera(CameraUpdateFactory.newLatLng(coordinate));
+//            mMap.animateCamera( CameraUpdateFactory.zoomTo( 17.0f ) );
+//            try {
+//                addresses = g.getFromLocation(latitude,longitude, 10);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            EditText et = (EditText) findViewById(R.id.park_title);
+//            if (!addresses.isEmpty()) {
+//                address = addresses.get(0).getAddressLine(0) + ", " +
+//                        addresses.get(0).getLocality() + ", " +
+//                        addresses.get(0).getCountryName() + ", " +
+//                        addresses.get(0).getPostalCode();
+//                et.setText(address);
+//            } else {
+//                et.setText("NewParking");
+//            }
+//        }
+//    }
 
     /**
      * Manipulates the map once available.
@@ -127,7 +127,7 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
         }
     }
 
-    private void setButtons(){
+    private void setButtons() {
         ImageButton cancel = (ImageButton) findViewById(R.id.location_canc);
         ImageButton delete = (ImageButton) findViewById(R.id.location_del);
         ImageButton save = (ImageButton) findViewById(R.id.location_save);
@@ -163,7 +163,7 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
                 EditText notes = (EditText) findViewById(R.id.park_note);
                 String coordinate = latitude.toString() + ":" + longitude.toString();
                 boolean res = db.delete(title.getText().toString(), coordinate, notes.getText().toString());
-                if(res){
+                if (res) {
                     Toast.makeText(LocationActivity.this, "Parcheggio eliminato correttamente", Toast.LENGTH_SHORT).show();
                     finish();
                 }
@@ -202,19 +202,79 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
                 imageFileName,  // prefix
                 ".jpg",         // suffix
                 storageDir      // directory
-                );
+        );
         picPath = "file:" + image.getAbsolutePath();
         return image;
     }
 
     @Override
+    public void onBackPressed() {
+        finish();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK){
+        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             try {
                 pic = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(picPath));
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        try {
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            latitude = mLastLocation.getLatitude();
+            longitude = mLastLocation.getLongitude();
+            if (latitude != null && longitude != null) {
+                LatLng coordinate = new LatLng(latitude, longitude);
+                mMap.addMarker(new MarkerOptions().position(coordinate).title("Your Car"));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordinate, 17));
+                setParkAddress();
+            }
+        } catch (SecurityException e) {
+            Toast.makeText(LocationActivity.this, "Attenzione: permessi di localizzaizione non concessi", Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    private void setParkAddress(){
+        try {
+            addresses = g.getFromLocation(latitude,longitude, 10);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        EditText et = (EditText) findViewById(R.id.park_title);
+        if (!addresses.isEmpty()) {
+            address = addresses.get(0).getAddressLine(0) + ", " +
+                    addresses.get(0).getLocality() + ", " +
+                    addresses.get(0).getCountryName() + ", " +
+                    addresses.get(0).getPostalCode();
+            et.setText(address);
+        } else {
+            et.setText("NewParking");
         }
     }
 }
