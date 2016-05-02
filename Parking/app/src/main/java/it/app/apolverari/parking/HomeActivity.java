@@ -141,6 +141,7 @@ public class HomeActivity extends AppCompatActivity
                 Bundle b = new Bundle();
                 b.putSerializable("park", p);
                 i.putExtras(b);
+                i.putExtra("isNew", false);
                 startActivity(i);
             }
         });

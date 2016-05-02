@@ -45,9 +45,12 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
     private String address;
     private static final int REQUEST_CODE = 1;
     private Bitmap pic;
+    private boolean isNew = true;
     private String picPath = "";
-    GoogleApiClient mGoogleApiClient;
-    Location mLastLocation;
+    private GoogleApiClient mGoogleApiClient;
+    private Location mLastLocation;
+    private EditText fieldNote;
+    private EditText fieldTitle;
 
     @SuppressLint("NewApi")
     @Override
@@ -63,10 +66,21 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
         }
         g = new Geocoder(this, Locale.getDefault());
         db = new DBManager(this);
+        fieldNote = (EditText) findViewById(R.id.park_note);
+        fieldTitle = (EditText) findViewById(R.id.park_title);
         setButtons();
         Intent i  = getIntent();
-        Parking p = (Parking) i.getExtras().get("park");
-        String coordinate = db.getCoordinate(p.getAddress(), p.getDate(), "");
+        if (i.getExtras() != null) {
+            isNew = i.getBooleanExtra("isNew", true);
+            Parking p = (Parking) i.getExtras().get("park");
+            String coordinate = db.getCoordinate(p.getAddress(), p.getDate());
+            String note = db.getNote(p.getAddress(), p.getDate());
+            latitude = Double.parseDouble(coordinate.split(":")[0]);
+            longitude = Double.parseDouble(coordinate.split(":")[1]);
+            fieldTitle.setEnabled(false);
+            fieldNote.setText(note);
+            fieldNote.setEnabled(false);
+        }
     }
 
     @Override
@@ -84,6 +98,8 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
         ImageButton delete = (ImageButton) findViewById(R.id.location_del);
         ImageButton save = (ImageButton) findViewById(R.id.location_save);
         ImageButton pic = (ImageButton) findViewById(R.id.location_pic);
+        ImageButton edit = (ImageButton) findViewById(R.id.location_edit);
+        ImageButton go = (ImageButton) findViewById(R.id.location_go);
         ImageButton share = (ImageButton) findViewById(R.id.location_share);
 
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -142,6 +158,23 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
                 }
             }
         });
+
+        go.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("google.navigation:q=" + latitude + "," + longitude));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
+
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fieldNote.setEnabled(true);
+                fieldTitle.setEnabled(true);
+            }
+        });
     }
 
     private File createImageFile() throws IOException {
@@ -187,7 +220,7 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
     public void onConnected(@Nullable Bundle bundle) {
         try {
             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-            if (mLastLocation != null) {
+            if (mLastLocation != null && isNew) {
                 latitude = mLastLocation.getLatitude();
                 longitude = mLastLocation.getLongitude();
             }

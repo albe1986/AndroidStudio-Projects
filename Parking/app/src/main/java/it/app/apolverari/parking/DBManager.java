@@ -81,7 +81,7 @@ public class DBManager {
         return id.toString();
     }
 
-    public String getCoordinate(String titolo, String data, String note){
+    public String getCoordinate(String titolo, String data){
         Cursor crs = null;
         String coordinate = "";
         SQLiteDatabase db = null;
@@ -89,8 +89,7 @@ public class DBManager {
             db = dbhelper.getReadableDatabase();
             crs = db.rawQuery("SELECT * FROM " + DBHelper.TABLE_NAME +
                     " WHERE " + DBHelper.FIELD_TITLE + " = '" + titolo + "'" +
-                    " AND " + DBHelper.FIELD_DATE + " = '" + data + "'" +
-                    " AND " + DBHelper.FIELD_NOTES + " = '" + note + "'", null);
+                    " AND " + DBHelper.FIELD_DATE + " = '" + data + "'", null);
             if (crs.moveToFirst()) {
                 coordinate = crs.getString(3);
             }
@@ -100,5 +99,25 @@ public class DBManager {
             db.close();
         }
         return coordinate;
+    }
+
+    public String getNote(String titolo, String data){
+        Cursor crs = null;
+        String note = "";
+        SQLiteDatabase db = null;
+        try {
+            db = dbhelper.getReadableDatabase();
+            crs = db.rawQuery("SELECT * FROM " + DBHelper.TABLE_NAME +
+                    " WHERE " + DBHelper.FIELD_TITLE + " = '" + titolo + "'" +
+                    " AND " + DBHelper.FIELD_DATE + " = '" + data + "'", null);
+            if (crs.moveToFirst()) {
+                note = crs.getString(2);
+            }
+        } catch (SQLiteException e){
+        } finally {
+            crs.close();
+            db.close();
+        }
+        return note;
     }
 }

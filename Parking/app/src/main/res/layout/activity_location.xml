@@ -88,4 +88,22 @@
         android:layout_toEndOf="@+id/location_canc"
         android:clickable="true"/>
 
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/location_edit"
+        android:layout_alignTop="@+id/location_save"
+        android:layout_toRightOf="@+id/location_del"
+        android:layout_toEndOf="@+id/location_del"
+        android:src="@android:drawable/ic_menu_edit" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/location_go"
+        android:layout_alignTop="@+id/location_save"
+        android:layout_toRightOf="@+id/location_save"
+        android:layout_toEndOf="@+id/location_save"
+        android:src="@android:drawable/ic_menu_send" />
+
 </RelativeLayout>
