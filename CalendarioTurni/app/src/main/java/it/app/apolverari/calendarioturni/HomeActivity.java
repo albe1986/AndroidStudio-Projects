@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -26,6 +27,7 @@ public class HomeActivity extends AppCompatActivity {
     private Button loadFile;
     private Button calcTurni;
     private Spinner comboAgenti;
+    private CalendarView calendarioTurni;
     private LinearLayout layoutTurni;
     private String arrayComboAgenti[];
     private HashMap turniAgente = new HashMap();
@@ -75,6 +77,7 @@ public class HomeActivity extends AppCompatActivity {
         comboAgenti = (Spinner) findViewById(R.id.comboAgenti);
         calcTurni = (Button) findViewById(R.id.buttonCalc);
         layoutTurni = (LinearLayout) findViewById(R.id.turniLayout);
+        calendarioTurni = (CalendarView) findViewById(R.id.calendarioTurni);
 
         filePath.setText(defaultPath);
 
@@ -99,6 +102,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String agente = (String) comboAgenti.getSelectedItem();
                 ExcelReader.calculate((ArrayList) turniAgente.get(agente), results);
+                calendarioTurni.setVisibility(View.VISIBLE);
             }
         });
     }
