@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import jxl.Cell;
 import jxl.CellType;
@@ -43,5 +44,10 @@ public class ExcelReader {
             e.printStackTrace();
         }
         return results;
+    }
+
+    public static void calculate(ArrayList<String> turniAgente, ArrayList ordineTurni){
+        ArrayList row = (ArrayList) ordineTurni.get(0);
+        String dataInizio = (String) row.get(0);
     }
 }

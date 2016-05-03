@@ -17,6 +17,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -27,6 +28,7 @@ public class HomeActivity extends AppCompatActivity {
     private Spinner comboAgenti;
     private LinearLayout layoutTurni;
     private String arrayComboAgenti[];
+    private HashMap turniAgente = new HashMap();
     private ArrayList results = new ArrayList();
     private File dir = Environment.getExternalStorageDirectory();
     private String defaultPath = dir.getAbsolutePath() + "/Download/**.xls";;
@@ -39,7 +41,6 @@ public class HomeActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions( this, new String[] {
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1 );
-
     }
 
     private void setUpComboAgenti(){
@@ -47,6 +48,15 @@ public class HomeActivity extends AppCompatActivity {
         for (int i = 2; i<results.size(); i++){
             ArrayList<String> row = (ArrayList<String>) results.get(i);
             arrayComboAgenti[i-2] = row.get(0);
+            ArrayList<String> turni = new ArrayList<>();
+            turni.add(row.get(1));
+            turni.add(row.get(2));
+            turni.add(row.get(3));
+            turni.add(row.get(4));
+            turni.add(row.get(5));
+            turni.add(row.get(6));
+            turni.add(row.get(7));
+            turniAgente.put(row.get(0), turni);
         }
         ArrayAdapter adapter = new ArrayAdapter(this,
                 android.R.layout.simple_spinner_item, arrayComboAgenti);
@@ -67,6 +77,7 @@ public class HomeActivity extends AppCompatActivity {
         layoutTurni = (LinearLayout) findViewById(R.id.turniLayout);
 
         filePath.setText(defaultPath);
+
         loadFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,6 +91,14 @@ public class HomeActivity extends AppCompatActivity {
                                     e.getMessage(),
                             Toast.LENGTH_LONG).show();
                 }
+            }
+        });
+
+        calcTurni.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String agente = (String) comboAgenti.getSelectedItem();
+                ExcelReader.calculate((ArrayList) turniAgente.get(agente), results);
             }
         });
     }
