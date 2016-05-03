@@ -42,12 +42,6 @@ public class ExcelReader {
         } catch (BiffException e) {
             e.printStackTrace();
         }
-
         return results;
     }
-
-    public void clearResults(ArrayList res){
-
-    }
-
 }

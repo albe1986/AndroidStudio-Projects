@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Calendario Turni</string>
-    <string name="buttonLoad">Carica</string>
+    <string name="buttonLoad">Carica File</string>
+    <string name="buttonCalc">Calcola Turni</string>
 </resources>
