@@ -19,7 +19,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class HomeActivity extends AppCompatActivity {
+import it.app.apolverari.db.DBManager;
+
+public class UploadActivity extends AppCompatActivity {
 
     private TextView filePathLabel;
     private EditText filePath;
@@ -28,6 +30,7 @@ public class HomeActivity extends AppCompatActivity {
     private Spinner comboAgenti;
     private LinearLayout layoutTurni;
     private String arrayComboAgenti[];
+    private DBManager db;
     private HashMap turniAgente = new HashMap();
     private ArrayList results = new ArrayList();
     private File dir = Environment.getExternalStorageDirectory();
@@ -38,6 +41,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         setUpViewsAndButtons();
+        db = new DBManager(this);
         ActivityCompat.requestPermissions( this, new String[] {
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1 );
@@ -84,10 +88,11 @@ public class HomeActivity extends AppCompatActivity {
                 try {
                     String newPath = filePath.getText().toString();
                     results = ExcelReader.read(newPath);
+                    ExcelReader.saveToDB(results, db);
                     setUpComboAgenti();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    Toast.makeText(HomeActivity.this, "Errore durante il caricamento del file: " +
+                    Toast.makeText(UploadActivity.this, "Errore durante il caricamento del file: " +
                                     e.getMessage(),
                             Toast.LENGTH_LONG).show();
                 }

@@ -1,17 +1,17 @@
 package it.app.apolverari.calendarioturni;
 
+import android.content.Context;
+
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Locale;
 
+import it.app.apolverari.db.DBManager;
 import jxl.Cell;
 import jxl.CellType;
 import jxl.Sheet;
@@ -50,6 +50,14 @@ public class ExcelReader {
             e.printStackTrace();
         }
         return results;
+    }
+
+    public static void saveToDB(ArrayList results, DBManager db){
+        ArrayList firstRow = (ArrayList) results.get(0);
+        String dataInizio = (String) firstRow.get(0);
+        for (int i = 2; i<results.size(); i++){
+            db.save((ArrayList<String>) results.get(i), dataInizio);
+        }
     }
 
     public static void calculate(ArrayList<String> turniAgente, ArrayList ordineTurni){

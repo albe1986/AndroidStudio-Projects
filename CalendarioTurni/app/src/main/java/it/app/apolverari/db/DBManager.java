@@ -19,17 +19,17 @@ public class DBManager {
         dbhelper = new DBHelper(ctx);
     }
 
-    public boolean save(String agente, ArrayList<String> turni, String dataInizio){
+    public boolean save(ArrayList<String> turniAgente, String dataInizio){
         SQLiteDatabase db = dbhelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put(DBHelper.FIELD_AGE, agente);
-        cv.put(DBHelper.FIELD_LUN, turni.get(0));
-        cv.put(DBHelper.FIELD_MAR, turni.get(1));
-        cv.put(DBHelper.FIELD_MER, turni.get(2));
-        cv.put(DBHelper.FIELD_GIO, turni.get(3));
-        cv.put(DBHelper.FIELD_VEN, turni.get(4));
-        cv.put(DBHelper.FIELD_SAB, turni.get(5));
-        cv.put(DBHelper.FIELD_DOM, turni.get(6));
+        cv.put(DBHelper.FIELD_AGE, turniAgente.get(0));
+        cv.put(DBHelper.FIELD_LUN, turniAgente.get(1));
+        cv.put(DBHelper.FIELD_MAR, turniAgente.get(2));
+        cv.put(DBHelper.FIELD_MER, turniAgente.get(3));
+        cv.put(DBHelper.FIELD_GIO, turniAgente.get(4));
+        cv.put(DBHelper.FIELD_VEN, turniAgente.get(5));
+        cv.put(DBHelper.FIELD_SAB, turniAgente.get(6));
+        cv.put(DBHelper.FIELD_DOM, turniAgente.get(7));
         cv.put(DBHelper.FIELD_DIN, dataInizio);
         try {
             db.insert(DBHelper.TABLE_NAME, null, cv);
