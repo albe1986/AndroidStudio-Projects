@@ -3,8 +3,14 @@ package it.app.apolverari.calendarioturni;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Locale;
 
 import jxl.Cell;
 import jxl.CellType;
@@ -49,5 +55,15 @@ public class ExcelReader {
     public static void calculate(ArrayList<String> turniAgente, ArrayList ordineTurni){
         ArrayList row = (ArrayList) ordineTurni.get(0);
         String dataInizio = (String) row.get(0);
+        DateFormat format = new SimpleDateFormat("d-MMM-yy");
+        Date dataIn = new Date();
+        try {
+            dataIn = format.parse(dataInizio);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        GregorianCalendar gc = new java.util.GregorianCalendar();
+        gc.setTime(dataIn);
+        gc.getTime();
     }
 }
