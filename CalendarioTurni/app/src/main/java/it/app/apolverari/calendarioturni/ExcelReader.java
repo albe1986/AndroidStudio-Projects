@@ -38,7 +38,7 @@ public class ExcelReader {
                         ArrayList<String> newRow = new ArrayList<>();
                         for (int i = 1; i<row.length; i++){
                             String cellContent = row[i].getContents();
-                            if (!cellContent.equals("")) {
+                            if (!cellContent.equals("") && !cellContent.equals("#ERROR!")) {
                                 newRow.add(cellContent);
                             }
                         }
@@ -52,12 +52,17 @@ public class ExcelReader {
         return results;
     }
 
-    public static void saveToDB(ArrayList results, DBManager db){
+    public static boolean saveToDB(ArrayList results, DBManager db){
+        boolean res = false;
         ArrayList firstRow = (ArrayList) results.get(0);
         String dataInizio = (String) firstRow.get(0);
         for (int i = 2; i<results.size(); i++){
-            db.save((ArrayList<String>) results.get(i), dataInizio);
+            ArrayList<String> turniAgente = (ArrayList<String>) results.get(i);
+            if (turniAgente.size() == 8) {
+                res = db.save(turniAgente, String.valueOf(i-2), dataInizio);
+            }
         }
+        return res;
     }
 
     public static void calculate(ArrayList<String> turniAgente, ArrayList ordineTurni){

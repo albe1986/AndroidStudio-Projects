@@ -12,6 +12,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "CALENDARIO_TURNI";
     public static final String TABLE_NAME = "TURNI";
     public static final String FIELD_ID = "ID";
+    public static final String FIELD_POS = "POS";
     public static final String FIELD_AGE = "AGE";
     public static final String FIELD_LUN = "LUN";
     public static final String FIELD_MAR = "MAR";
@@ -24,14 +25,15 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String CREATE_QUERY =
             "CREATE TABLE " + TABLE_NAME + " (" +
                     FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    FIELD_AGE + " TEXT, " +
+                    FIELD_POS + " TEXT UNIQUE, " +
+                    FIELD_AGE + " TEXT UNIQUE, " +
                     FIELD_LUN + " TEXT, " +
                     FIELD_MAR + " TEXT, " +
                     FIELD_MER + " TEXT, " +
-                    FIELD_GIO + " TEXT " +
-                    FIELD_VEN + " TEXT " +
-                    FIELD_SAB + " TEXT " +
-                    FIELD_DOM + " TEXT " +
+                    FIELD_GIO + " TEXT, " +
+                    FIELD_VEN + " TEXT, " +
+                    FIELD_SAB + " TEXT, " +
+                    FIELD_DOM + " TEXT, " +
                     FIELD_DIN + " TEXT " + ");";
 
     public DBHelper(Context context) {

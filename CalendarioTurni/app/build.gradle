@@ -19,12 +19,16 @@ android {
     }
 }
 
+repositories {
+    maven { url "https://jitpack.io" }
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile files('libs/poi-3.14-20160307.jar')
     compile files('libs/jxl.jar')
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.android.support:design:23.3.0'
     compile 'com.android.support:support-v4:23.3.0'
+    compile 'com.github.npanigrahy:Custom-Calendar-View:v1.0'
 }

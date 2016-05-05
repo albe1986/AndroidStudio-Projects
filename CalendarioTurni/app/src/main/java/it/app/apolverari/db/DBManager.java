@@ -19,9 +19,10 @@ public class DBManager {
         dbhelper = new DBHelper(ctx);
     }
 
-    public boolean save(ArrayList<String> turniAgente, String dataInizio){
+    public boolean save(ArrayList<String> turniAgente, String pos, String dataInizio){
         SQLiteDatabase db = dbhelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
+        cv.put(DBHelper.FIELD_POS, pos);
         cv.put(DBHelper.FIELD_AGE, turniAgente.get(0));
         cv.put(DBHelper.FIELD_LUN, turniAgente.get(1));
         cv.put(DBHelper.FIELD_MAR, turniAgente.get(2));
@@ -32,7 +33,7 @@ public class DBManager {
         cv.put(DBHelper.FIELD_DOM, turniAgente.get(7));
         cv.put(DBHelper.FIELD_DIN, dataInizio);
         try {
-            db.insert(DBHelper.TABLE_NAME, null, cv);
+            db.replace(DBHelper.TABLE_NAME, null, cv);
         } catch (SQLiteException e){
             return false;
         } finally {
@@ -59,7 +60,7 @@ public class DBManager {
         SQLiteDatabase db = null;
         try {
             db = dbhelper.getReadableDatabase();
-            crs = db.query(DBHelper.TABLE_NAME, null, null, null, null, null, null, null);
+            crs = db.query(DBHelper.TABLE_NAME, null, null, null, null, null, DBHelper.FIELD_AGE, null);
         } catch (SQLiteException e){
             return null;
         }
