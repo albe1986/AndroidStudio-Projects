@@ -56,6 +56,7 @@ public class UploadActivity extends AppCompatActivity {
                         b.putSerializable("results", results);
                         i.putExtras(b);
                         startActivity(i);
+                        finish();
                     }
                 } catch (IOException e) {
                     e.printStackTrace();

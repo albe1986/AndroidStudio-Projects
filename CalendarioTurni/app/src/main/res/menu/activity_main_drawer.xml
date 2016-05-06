@@ -19,9 +19,9 @@
                 android:icon="@drawable/ic_menu_share"
                 android:title="@string/navCondividi" />
             <item
-                android:id="@+id/navInvia"
+                android:id="@+id/navExit"
                 android:icon="@drawable/ic_menu_send"
-                android:title="@string/navInvia" />
+                android:title="@string/navExit" />
         </menu>
     </item>
 
