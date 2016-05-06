@@ -9,12 +9,4 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="it.app.apolverari.calendarioturni.TurniActivity">
 
-    <CalendarView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/calendarioTurni"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
 </RelativeLayout>
