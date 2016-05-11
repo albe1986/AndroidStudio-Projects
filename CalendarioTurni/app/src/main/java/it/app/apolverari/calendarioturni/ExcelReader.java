@@ -70,11 +70,11 @@ public class ExcelReader {
         String dataInizio = (String) row.get(0);
         DateFormat format = new SimpleDateFormat("d-MMM-yy");
         Date dataIn = new Date();
-        try {
-            dataIn = format.parse(dataInizio);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            dataIn = format.parse(dataInizio);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
         GregorianCalendar gc = new java.util.GregorianCalendar();
         gc.setTime(dataIn);
         gc.getTime();

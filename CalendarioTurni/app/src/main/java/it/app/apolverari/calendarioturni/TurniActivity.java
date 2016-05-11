@@ -1,14 +1,16 @@
 package it.app.apolverari.calendarioturni;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.WebView;
 
 
 public class TurniActivity extends AppCompatActivity {
+
+    private HTMLCalendar calendar;
+    private WebView calendarioHTML;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,6 +18,12 @@ public class TurniActivity extends AppCompatActivity {
         setContentView(R.layout.activity_turni);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        calendarioHTML = (WebView) findViewById(R.id.calendarioHTML);
+        calendar = new HTMLCalendar("Maggio", 2016);
+        calendar.generateHTML();
+        String HTML = calendar.getHTML();
+        calendarioHTML.getSettings().getJavaScriptEnabled();
+        calendarioHTML.loadData(HTML, "text/html", "UTF-8");
     }
 
 
@@ -34,10 +42,12 @@ public class TurniActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        finish();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.export_pdf) {
             return true;
