@@ -67,16 +67,17 @@ public class ExcelReader {
 
     public static void calculate(ArrayList<String> turniAgente, ArrayList ordineTurni){
         ArrayList row = (ArrayList) ordineTurni.get(0);
-        String dataInizio = (String) row.get(0);
+        String dataInizio = (String) row.get(8);
         DateFormat format = new SimpleDateFormat("d-MMM-yy");
         Date dataIn = new Date();
-//        try {
-//            dataIn = format.parse(dataInizio);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            dataIn = format.parse(dataInizio);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         GregorianCalendar gc = new java.util.GregorianCalendar();
         gc.setTime(dataIn);
-        gc.getTime();
+        int mese = dataIn.getMonth();
+        int giorno = dataIn.getDay();
     }
 }

@@ -34,16 +34,13 @@ public class TurniActivity extends AppCompatActivity {
         months.put(10, "Novembre");
         months.put(11, "Dicembre");
         String HTML = "";
-        for (int i = 0; i<11; i++){
+        for (int i = 0; i<12; i++){
             HTMLCalendar c = new HTMLCalendar(months.get(i), 2016);
             c.generateHTML();
             String tmp = c.getHTML();
             HTML += tmp;
         }
         calendarioHTML = (WebView) findViewById(R.id.calendarioHTML);
-//        calendar = new HTMLCalendar("Dicembre", 2016);
-//        calendar.generateHTML();
-//        String HTML = calendar.getHTML();
         calendarioHTML.getSettings().getJavaScriptEnabled();
         calendarioHTML.loadData(HTML, "text/html", "UTF-8");
     }
