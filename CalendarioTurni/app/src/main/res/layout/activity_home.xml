@@ -11,7 +11,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".UploadActivity"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:background="@android:color/background_light">
 
     <TextView
         android:layout_width="match_parent"
@@ -32,7 +33,14 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/filePath" />
+        android:id="@+id/filePath"
+        android:enabled="false" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/buttonBrowse"
+        android:id="@+id/buttonBrowse" />
 
     <Button
         android:layout_width="match_parent"

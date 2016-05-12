@@ -15,9 +15,8 @@ public class HTMLCalendar {
     private Integer firstDayOfWeek;
     private Integer dayOfTheWeek;
     private String HTML = "";
-    private String openHTML =   "<!doctype html>\n" +
-                                "<html>" +
-                                "<div>";
+    private String openHTML =   "<html>" +
+                                "<div style=\"font-family:fantasy; font-size:x-large;\">";
     private String header;
     private String table =  "  <tr>\n" +
                             "    <td>LUN</td>\n" +
@@ -84,7 +83,7 @@ public class HTMLCalendar {
         months.put("Maggio", 4);
         months.put("Giugno", 5);
         months.put("Luglio", 6);
-        months.put("Agosto", 6);
+        months.put("Agosto", 7);
         months.put("Settembre", 8);
         months.put("Ottobre", 9);
         months.put("Novembre", 10);
@@ -136,6 +135,10 @@ public class HTMLCalendar {
         int lastDay = 0;
         String week = "<tr>";
         for (int j = 0; j<monthDays; j++){
+            if (blankDays == 0 && day<=7) {
+                day++;
+                continue;
+            }
             if (j == 6 || j == 13 || j == 20 || j == 27){
                 if (day<=monthDays) {
                     week += "<td>" + String.valueOf(day) + "</td>" + "</tr>";
@@ -172,6 +175,8 @@ public class HTMLCalendar {
         HTML += lastWeekTR + "</tr>";
         HTML += closeHTML;
     }
+
+
 
     public String getHTML(){
         return this.HTML;
