@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import it.app.apolverari.db.DBManager;
 import jxl.Cell;
@@ -67,17 +68,7 @@ public class ExcelReader {
 
     public static void calculate(ArrayList<String> turniAgente, ArrayList ordineTurni){
         ArrayList row = (ArrayList) ordineTurni.get(0);
-        String dataInizio = (String) row.get(8);
-        DateFormat format = new SimpleDateFormat("d-MMM-yy");
-        Date dataIn = new Date();
-        try {
-            dataIn = format.parse(dataInizio);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        GregorianCalendar gc = new java.util.GregorianCalendar();
-        gc.setTime(dataIn);
-        int mese = dataIn.getMonth();
-        int giorno = dataIn.getDay();
+
+
     }
 }

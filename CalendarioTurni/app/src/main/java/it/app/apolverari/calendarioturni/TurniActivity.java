@@ -4,7 +4,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import java.util.HashMap;
 
@@ -21,28 +24,15 @@ public class TurniActivity extends AppCompatActivity {
         setContentView(R.layout.activity_turni);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        months.put(0,"Gennaio");
-        months.put(1, "Febbraio");
-        months.put(2, "Marzo");
-        months.put(3, "Aprile");
-        months.put(4, "Maggio");
-        months.put(5, "Giugno");
-        months.put(6, "Luglio");
-        months.put(7, "Agosto");
-        months.put(8, "Settembre");
-        months.put(9, "Ottobre");
-        months.put(10, "Novembre");
-        months.put(11, "Dicembre");
-        String HTML = "";
-        for (int i = 0; i<12; i++){
-            HTMLCalendar c = new HTMLCalendar(months.get(i), 2016);
-            c.generateHTML();
-            String tmp = c.getHTML();
-            HTML += tmp;
-        }
+        String HTML = HTMLCalendar.test();
         calendarioHTML = (WebView) findViewById(R.id.calendarioHTML);
-        calendarioHTML.getSettings().getJavaScriptEnabled();
-        calendarioHTML.loadData(HTML, "text/html", "UTF-8");
+        calendarioHTML.setWebViewClient(new WebViewClient());
+        calendarioHTML.getSettings().setJavaScriptEnabled(true);
+        calendarioHTML.getSettings().setLoadWithOverviewMode(true);
+        //calendarioHTML.getSettings().setUseWideViewPort(true);
+        calendarioHTML.getSettings().setBuiltInZoomControls(true);
+        calendarioHTML.loadDataWithBaseURL("blarg://ignored", HTML, "text/html", "utf-8", "");
+
     }
 
 

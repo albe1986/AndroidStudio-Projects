@@ -43,7 +43,7 @@ public class DBManager {
     }
 
     public boolean delete(String agente, String dataInizio, String note){
-        String id = getIdPark(agente, dataInizio);
+        String id = "";
         SQLiteDatabase db = dbhelper.getWritableDatabase();
         try {
             int recordDeleted = db.delete(DBHelper.TABLE_NAME, DBHelper.FIELD_ID + "=?", new String[]{id});
@@ -67,17 +67,16 @@ public class DBManager {
         return crs;
     }
 
-    public String getIdPark(String agente, String dataInizio){
+    public String getPosAgente(String agente){
         Cursor crs = null;
         Integer id = 0;
         SQLiteDatabase db = null;
         try {
             db = dbhelper.getReadableDatabase();
             crs = db.rawQuery("SELECT * FROM " + DBHelper.TABLE_NAME +
-                    " WHERE " + DBHelper.FIELD_AGE + " = '" + agente + "'" +
-                    " AND " + DBHelper.FIELD_DIN + " = '" + dataInizio + "'", null);
+                    " WHERE " + DBHelper.FIELD_AGE + " = '" + agente + "'", null);
             if (crs.moveToFirst()) {
-                id = crs.getInt(0);
+                id = crs.getInt(1);
             }
         } catch (SQLiteException e){
         } finally {
