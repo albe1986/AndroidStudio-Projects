@@ -56,7 +56,7 @@ public class TurniActivity extends AppCompatActivity {
             byear = i.getIntExtra("year", 0);
         }
 
-        String HTML = ExcelReader.calculate(db, agente, turniAgente, months.get(bmonth), bday);
+        String HTML = MiscUtils.calcolaTurni(db, agente, turniAgente, months.get(bmonth), bday);
 
         calendarioHTML = (WebView) findViewById(R.id.calendarioHTML);
         calendarioHTML.setWebViewClient(new WebViewClient());

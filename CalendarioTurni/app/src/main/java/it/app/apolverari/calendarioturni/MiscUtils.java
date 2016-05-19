@@ -24,7 +24,7 @@ import jxl.read.biff.BiffException;
 /**
  * Created by a.polverari on 03/05/2016.
  */
-public class ExcelReader {
+public class MiscUtils {
 
     private static String[] mesi = {"Gennaio",
             "Febbraio",
@@ -39,7 +39,7 @@ public class ExcelReader {
             "Novembre",
             "Dicembre"};
 
-    public static ArrayList read(String path) throws IOException  {
+    public static ArrayList readExcel(String path) throws IOException  {
         ArrayList results = new ArrayList();
         File inputWorkbook = new File(path);
         Workbook w;
@@ -68,7 +68,7 @@ public class ExcelReader {
         return results;
     }
 
-    public static boolean saveToDB(ArrayList results, DBManager db){
+    public static boolean saveExcelToDB(ArrayList results, DBManager db){
         boolean res = false;
         ArrayList firstRow = (ArrayList) results.get(0);
         String dataInizio = (String) firstRow.get(0);
@@ -81,7 +81,7 @@ public class ExcelReader {
         return res;
     }
 
-    public static String calculate(DBManager db,
+    public static String calcolaTurni(DBManager db,
             String agente, ArrayList<String> turniAgente, Integer month, Integer bday){
 
         String HTML = "";

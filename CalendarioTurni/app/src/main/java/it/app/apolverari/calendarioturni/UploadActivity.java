@@ -77,8 +77,8 @@ public class UploadActivity extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     String newPath = filePath.getText().toString();
-                    results = ExcelReader.read(newPath);
-                    boolean res = ExcelReader.saveToDB(results, db);
+                    results = MiscUtils.readExcel(newPath);
+                    boolean res = MiscUtils.saveExcelToDB(results, db);
                     if (res){
                         Intent i = new Intent(getApplicationContext(), MainActivity.class);
                         Bundle b = new Bundle();
