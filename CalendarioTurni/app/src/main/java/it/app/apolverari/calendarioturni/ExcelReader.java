@@ -8,8 +8,10 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Locale;
 
 import it.app.apolverari.db.DBManager;
@@ -23,6 +25,19 @@ import jxl.read.biff.BiffException;
  * Created by a.polverari on 03/05/2016.
  */
 public class ExcelReader {
+
+    private static String[] mesi = {"Gennaio",
+            "Febbraio",
+            "Marzo",
+            "Aprile",
+            "Maggio",
+            "Giugno",
+            "Luglio",
+            "Agosto",
+            "Settembre",
+            "Ottobre",
+            "Novembre",
+            "Dicembre"};
 
     public static ArrayList read(String path) throws IOException  {
         ArrayList results = new ArrayList();
@@ -66,9 +81,84 @@ public class ExcelReader {
         return res;
     }
 
-    public static void calculate(ArrayList<String> turniAgente, ArrayList ordineTurni){
-        ArrayList row = (ArrayList) ordineTurni.get(0);
+    public static String calculate(DBManager db,
+            String agente, ArrayList<String> turniAgente, Integer month, Integer bday){
 
+        String HTML = "";
+        Integer daysInMonth = 0;
+        String[] turnoWeek = null;
+        HashMap<Integer, ArrayList<String>> parzialiMesi = new HashMap<>();
+        ArrayList<String> turnoParziale = new ArrayList<>();
 
+        Integer curPos = Integer.parseInt(db.getPosAgente(agente));
+        GregorianCalendar gc = new GregorianCalendar();
+
+        int monthsToShow = 12-month;
+        for (int m = 0; m<monthsToShow; m++){
+            gc.set(2016, month, bday);
+            daysInMonth = gc.getActualMaximum(Calendar.DAY_OF_MONTH);
+            ArrayList<String> turniMese = new ArrayList<>();
+            HashMap<Integer, String> turniGiorni = new HashMap<>();
+
+            int partSize = 0;
+            int n = 1;
+            if (m == 0) {
+                n = bday;
+                daysInMonth = daysInMonth - (bday - 1);
+            }
+
+            while(turniMese.size()<(daysInMonth)){
+                turnoWeek = db.getTurnoByPos(String.valueOf(curPos));
+                for (int t = 0;t<turnoWeek.length; t++){
+                    turniMese.add(turnoWeek[t]);
+                }
+                curPos++;
+            }
+
+            if (turniMese.size()>daysInMonth){
+                turnoParziale = new ArrayList<>();
+                int idx = turniMese.size() - (turniMese.size()-daysInMonth);
+                int limit = turniMese.size();
+                for(int p = idx; p<limit; p++){
+                    turnoParziale.add(turniMese.get(p));
+                }
+                for(int del = limit; del>daysInMonth; del--){
+                    turniMese.remove(del-1);
+                }
+                parzialiMesi.put(month + 1, turnoParziale);
+            }
+
+            if (parzialiMesi.containsKey(month)){
+                ArrayList<String> tmp = parzialiMesi.get(month);
+                partSize = tmp.size();
+                for (int part = 0; part<partSize; part++){
+                    turniGiorni.put(part+1, tmp.get(part));
+                }
+                if (month!= 11) {
+                    ArrayList<String> parFin = new ArrayList<>();
+                    for (int s = turniMese.size() - partSize; s < turniMese.size(); s++) {
+                        parFin.add(turniMese.get(s));
+                    }
+                    parFin.addAll(turnoParziale);
+                    parzialiMesi.put(month + 1, parFin);
+                }
+            }
+
+            for (int d = 0; d<daysInMonth; d++){
+                if (m == 0) {
+                    turniGiorni.put(n, turniMese.get(d));
+                    n++;
+                } else {
+                    turniGiorni.put(d+partSize, turniMese.get(d));
+                }
+            }
+
+            HTMLCalendar c = new HTMLCalendar(mesi[month], 2016);
+            c.generateHTML(turniGiorni);
+            HTML += c.getHTML();
+
+            month++;
+        }
+        return HTML;
     }
 }

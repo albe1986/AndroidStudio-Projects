@@ -31,6 +31,9 @@ public class MainActivity extends AppCompatActivity
     private TextView noTurni;
     private Button calcTurni;
     private LinearLayout layout;
+    private Spinner giorno;
+    private Spinner mese;
+    private Spinner anno;
     private Spinner comboAgenti;
     private String arrayComboAgenti[];
     private ArrayList results = new ArrayList();
@@ -59,6 +62,7 @@ public class MainActivity extends AppCompatActivity
 
         if (checkTurni()){
             layout.removeView(noTurni);
+            setUpComboDataInizio();
             setUpComboAgenti();
         }
 
@@ -154,12 +158,24 @@ public class MainActivity extends AppCompatActivity
         comboAgenti = (Spinner) findViewById(R.id.comboAgenti);
         calcTurni = (Button) findViewById(R.id.calcTurni);
         comboAgenti = (Spinner) findViewById(R.id.comboAgenti);
+        giorno = (Spinner) findViewById(R.id.giorno);
+        mese = (Spinner) findViewById(R.id.mese);
+        anno = (Spinner) findViewById(R.id.anno);
         calcTurni.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String agente = (String) comboAgenti.getSelectedItem();
-                ExcelReader.calculate((ArrayList) turniAgente.get(agente), results);
+                Integer day = (Integer) giorno.getSelectedItem();
+                String month = (String) mese.getSelectedItem();
+                Integer year = (Integer) anno.getSelectedItem();
                 Intent i = new Intent(getApplicationContext(), TurniActivity.class);
+                Bundle b = new Bundle();
+                b.putSerializable("turniAgente", (ArrayList) turniAgente.get(agente));
+                i.putExtras(b);
+                i.putExtra("agente", agente);
+                i.putExtra("day", day);
+                i.putExtra("month", month);
+                i.putExtra("year", year);
                 startActivity(i);
             }
         });
@@ -189,5 +205,53 @@ public class MainActivity extends AppCompatActivity
         } else {
             return false;
         }
+    }
+
+    private void setUpComboDataInizio(){
+        Integer[] arrayGG = new Integer[31];
+        String[] arrayMM = new String[12];
+        arrayMM[0] = "Gennaio";
+        arrayMM[1] = "Febbraio";
+        arrayMM[2] = "Marzo";
+        arrayMM[3] = "Aprile";
+        arrayMM[4] = "Maggio";
+        arrayMM[5] = "Giugno";
+        arrayMM[6] = "Luglio";
+        arrayMM[7] = "Agosto";
+        arrayMM[8] = "Settembre";
+        arrayMM[9] = "Ottobre";
+        arrayMM[10] = "Novembre";
+        arrayMM[11] = "Dicembre";
+
+        Integer[] arrayYY = new Integer[5];
+        arrayYY[0] = 2016;
+        arrayYY[1] = 2017;
+        arrayYY[2] = 2018;
+        arrayYY[3] = 2019;
+        arrayYY[4] = 2020;
+
+        for (int i = 0; i<arrayGG.length; i++){
+            arrayGG[i] = i+1;
+        }
+        ArrayAdapter adapterGG = new ArrayAdapter(this,
+                android.R.layout.simple_spinner_item, arrayGG);
+
+        ArrayAdapter adapterMM = new ArrayAdapter(this,
+                android.R.layout.simple_spinner_item, arrayMM);
+
+        ArrayAdapter adapterYY = new ArrayAdapter(this,
+                android.R.layout.simple_spinner_item, arrayYY);
+
+        giorno.setAdapter(adapterGG);
+        giorno.setSelection(1);
+        giorno.setVisibility(View.VISIBLE);
+
+        mese.setAdapter(adapterMM);
+        mese.setSelection(4);
+        mese.setVisibility(View.VISIBLE);
+
+        anno.setAdapter(adapterYY);
+        anno.setSelection(0);
+        anno.setVisibility(View.VISIBLE);
     }
 }

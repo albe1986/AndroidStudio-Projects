@@ -69,20 +69,49 @@ public class DBManager {
 
     public String getPosAgente(String agente){
         Cursor crs = null;
-        Integer id = 0;
+        String pos = "";
         SQLiteDatabase db = null;
         try {
             db = dbhelper.getReadableDatabase();
             crs = db.rawQuery("SELECT * FROM " + DBHelper.TABLE_NAME +
                     " WHERE " + DBHelper.FIELD_AGE + " = '" + agente + "'", null);
             if (crs.moveToFirst()) {
-                id = crs.getInt(1);
+                pos = crs.getString(1);
             }
         } catch (SQLiteException e){
         } finally {
             crs.close();
             db.close();
         }
-        return id.toString();
+        return pos;
+    }
+
+    public String[] getTurnoByPos(String pos){
+        Cursor crs = null;
+        String[] turni = new String[7];
+        SQLiteDatabase db = null;
+        try {
+            db = dbhelper.getReadableDatabase();
+            crs = db.rawQuery("SELECT * FROM " + DBHelper.TABLE_NAME +
+                    " WHERE " + DBHelper.FIELD_POS + " = '" + pos + "'", null);
+            if (crs.moveToFirst()) {
+                turni[0] = crs.getString(3);
+                turni[1] = crs.getString(4);
+                turni[2] = crs.getString(5);
+                turni[3] = crs.getString(6);
+                turni[4] = crs.getString(7);
+                turni[5] = crs.getString(8);
+                turni[6] = crs.getString(9);
+
+            } else {
+                return null;
+            }
+
+        } catch (SQLiteException e){
+        } finally {
+            crs.close();
+            db.close();
+        }
+        return turni;
     }
 }
