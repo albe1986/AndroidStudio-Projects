@@ -18,12 +18,14 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Data Inizio:"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:text="Data Inizio Turni:"
         android:id="@+id/dataInizioLabel"
         android:layout_gravity="center_horizontal"
         android:gravity="center"
-        android:layout_marginBottom="20dp" />
+        android:layout_marginBottom="20dp"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimaryDark" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -51,14 +53,24 @@
             android:id="@+id/anno" />
     </LinearLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+        android:text=" Selezionare un agente:"
+        android:id="@+id/agenteLabel"
+        android:layout_marginTop="45dp"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimaryDark" />
+
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/comboAgenti"
         android:visibility="invisible"
-        android:layout_marginTop="20dp"
-        android:spinnerMode="dropdown"
-        android:layout_marginBottom="20dp" />
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        style="@style/TextAppearance.AppCompat.Large" />
 
     <Button
         android:layout_width="match_parent"

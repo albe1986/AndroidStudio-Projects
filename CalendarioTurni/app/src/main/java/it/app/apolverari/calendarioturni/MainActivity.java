@@ -77,28 +77,28 @@ public class MainActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+//
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.main, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity
             }
         }
         ArrayAdapter adapter = new ArrayAdapter(this,
-                android.R.layout.simple_spinner_item, arrayComboAgenti);
+                R.layout.spinner_item_layout, arrayComboAgenti);
         comboAgenti.setAdapter(adapter);
         comboAgenti.setVisibility(View.VISIBLE);
         calcTurni.setVisibility(View.VISIBLE);
@@ -245,13 +245,16 @@ public class MainActivity extends AppCompatActivity
         giorno.setAdapter(adapterGG);
         giorno.setSelection(1);
         giorno.setVisibility(View.VISIBLE);
+        giorno.setEnabled(false);
 
         mese.setAdapter(adapterMM);
         mese.setSelection(4);
         mese.setVisibility(View.VISIBLE);
+        mese.setEnabled(false);
 
         anno.setAdapter(adapterYY);
         anno.setSelection(0);
         anno.setVisibility(View.VISIBLE);
+        anno.setEnabled(false);
     }
 }

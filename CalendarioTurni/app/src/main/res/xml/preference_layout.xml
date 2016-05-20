@@ -7,8 +7,8 @@
         android:defaultValue="false"
         android:summary="This option if selected will allow the application to check for latest versions."
         android:key="applicationUpdates" />
-    <ListPreference     android:title="Download Details"
-        android:summary="Select the kind of data that you would like to download"
-        android:key="downloadType"
+    <ListPreference     android:title="Rispristina dati applicazione"
+        android:summary="Elimina tutti i dati importati"
+        android:key="deleteAll"
         android:defaultValue="1"/>
 </PreferenceScreen>

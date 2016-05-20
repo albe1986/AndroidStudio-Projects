@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -18,14 +19,13 @@ public class TurniActivity extends AppCompatActivity {
 
     private DBManager db;
     private String agente;
-    private HTMLCalendar calendar;
-    private HashMap<String, Integer> months = new HashMap<>();
     private Integer bday;
     private String bmonth;
+    private String HTML;
     private Integer byear;
     private WebView calendarioHTML;
+    private HashMap<String, Integer> months = new HashMap<>();
     private ArrayList<String> turniAgente = new ArrayList<>();
-    private HashMap<Integer, String> turniMese = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,13 +56,16 @@ public class TurniActivity extends AppCompatActivity {
             byear = i.getIntExtra("year", 0);
         }
 
-        String HTML = MiscUtils.calcolaTurni(db, agente, turniAgente, months.get(bmonth), bday);
+        HTML = MiscUtils.calcolaTurni(db, agente, turniAgente, months.get(bmonth), bday);
 
         calendarioHTML = (WebView) findViewById(R.id.calendarioHTML);
         calendarioHTML.setWebViewClient(new WebViewClient());
+        //calendarioHTML.setWebChromeClient(new WebChromeClient());
         calendarioHTML.getSettings().setJavaScriptEnabled(true);
-        calendarioHTML.loadData(HTML, "text/html", "utf-8");
-        //calendarioHTML.loadDataWithBaseURL("blarg://ignored", HTML, "text/html", "utf-8", "");
+        //calendarioHTML.loadData(HTML, "text/html", "utf-8");
+        calendarioHTML.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+        calendarioHTML.getSettings().setDomStorageEnabled(true);
+        calendarioHTML.loadDataWithBaseURL("blarg://ignored", HTML, "text/html", "utf-8", "");
 
     }
 

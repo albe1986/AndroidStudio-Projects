@@ -28,19 +28,24 @@
         android:textStyle="bold"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="5dp"
-        android:textSize="20dp" />
+        android:textSize="20dp"
+        android:textColor="@color/colorPrimaryDark" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/filePath"
-        android:enabled="false" />
+        android:enabled="false"
+        style="@style/spinner_textview"
+        android:layout_marginBottom="25dp"
+        android:layout_marginTop="10dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/buttonBrowse"
-        android:id="@+id/buttonBrowse" />
+        android:id="@+id/buttonBrowse"
+        android:layout_marginBottom="50dp" />
 
     <Button
         android:layout_width="match_parent"

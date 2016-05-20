@@ -14,20 +14,67 @@ public class HTMLCalendar {
     private Integer monthDays;
     private Integer firstDayOfWeek;
     private Integer dayOfTheWeek;
+    private String styleAndJavascript = "<head>\n" +
+                                        "<style>\n" +
+                                        ".cal_calendar\n" +
+                                        "{\n" +
+                                        "        border:3px solid;\n" +
+                                        "        padding:1px;\n" +
+                                        "        margin:auto;\n" +
+                                        "        border-color: #9fc0fc;\n" +
+                                        "        border-style: outset;\n" +
+                                        "        align: left;" +
+                                        "}\n" +
+                                        ".cal_calendar td\n" +
+                                        "{\n" +
+                                        "        border:2px solid;\n" +
+                                        "        border-style: inset;\n" +
+                                        "        background-color:#dae0ff;\n" +
+                                        "}\n" +
+                                        "\n" +
+                                        ".cal_calendar_cell\n" +
+                                        "{\n" +
+                                        "        border:2px solid;\n" +
+                                        "        padding:1px;\n" +
+                                        "        border-color: #9fc0fc;\n" +
+                                        "        border-style: outset;\n" +
+                                        "        width: 100%;\n" +
+                                        "        height: 100%;\n" +
+                                        "}\n" +
+                                        "\n" +
+                                        ".cal_calendar_cell td\n" +
+                                        "{\n" +
+                                        "        border: hidden;\n" +
+                                        "        border-color: #9fc0fc;\n" +
+                                        "        font-size: 13px;\n" +
+                                        "        background-color:#dae0ff;\n" +
+                                        "}\n" +
+                                        "</style>\n" +
+                                        "</head>\n" +
+                                        "<script type=\"text/javascript\">\n" +
+                                        "    function pressDay(obj){\n" +
+                                        "        obj.setAttribute(\"style\", \"border-style:inset\");\n" +
+                                        "    }\n" +
+                                        "    \n" +
+                                        "    function releaseDay(obj){\n" +
+                                        "        obj.setAttribute(\"style\", \"border-style:outset\");\n" +
+                                        "    }\n" +
+                                        "</script>";
     private String HTML = "";
     private String openHTML =   "<html>" +
-                                "<body style=\"font-family:sans-serif; font-size:x-large;\">" +
+                                "<body style=\"font-family:sans-serif;\">" +
+                                    styleAndJavascript +
                                 "<div>";
     private String header;
-    private String table =  "  <tr>\n" +
-                            "    <td><b>LUN</b></td>\n" +
-                            "    <td><b>MAR</b></td>\n" +
-                            "    <td><b>MER</b></td>\n" +
-                            "    <td><b>GIO</b></td>\n" +
-                            "    <td><b>VEN</b></td>\n" +
-                            "    <td><b>SAB</b></td>\n" +
-                            "    <td style=\"color:#BF1313;\"><b>DOM</b></td>\n" +
-                            "  </tr>";
+    private String table =  "<tr>\n" +
+                            "  <td style=\"font-size:17px;color:#303f9f;\"><b>LUN</b></td>\n" +
+                            "  <td style=\"font-size:17px;color:#303f9f;\"><b>MAR</b></td>\n" +
+                            "  <td style=\"font-size:17px;color:#303f9f;\"><b>MER</b></td>\n" +
+                            "  <td style=\"font-size:17px;color:#303f9f;\"><b>GIO</b></td>\n" +
+                            "  <td style=\"font-size:17px;color:#303f9f;\"><b>VEN</b></td>\n" +
+                            "  <td style=\"font-size:17px;color:#303f9f;\"><b>SAB</b></td>\n" +
+                            "  <td style=\"font-size:17px;color:#BF1313;\"><b>DOM</b></td>\n" +
+                            "</tr>";
 
     private String closeHTML =  "</table>\n" +
                                 "</div>\n" +
@@ -39,11 +86,11 @@ public class HTMLCalendar {
         GregorianCalendar gc = new GregorianCalendar();
         gc.set(year, months.get(month), 1);
         header =    "<header align=\"center\">\n" +
-                    "<h2>" +
+                    "<h2 style=\"font-size:35px;color:#303f9f;\">" +
                     month + " " + String.valueOf(year) +
                     "</h2>\n" +
                     "</header>" +
-                    "<table align=\"center\" border=\"1px\">";
+                    "<table class=\"cal_calendar\" >";
         this.dayOfTheWeek = gc.getTime().getDay();
         switch (dayOfTheWeek){
             case 1:
@@ -129,14 +176,14 @@ public class HTMLCalendar {
         for (int t = 1; t<8-blankDays; t++){
             //firstWeekTR += "<td>" + String.valueOf(t) + "</td>";
             firstWeekTR += "<td align=\"center\">" +
-                    "<table>" +
+                    "<table onmouseup=\"releaseDay(this)\" onmousedown=\"pressDay(this)\"class=\"cal_calendar_cell\" >" +
                     "<tr>" +
-                    "<td align=\"right\">" +
+                    "<td style=\"font-weight: bold;;color:#303f9f;\" align=\"right\">" +
                     String.valueOf(t) +
                     "</td>" +
                     "</tr>" +
                     "<tr>" +
-                    "<td>" +
+                    "<td style=\"font-weight: bold;color:#e68a09;\">" +
                     (turniGG.get(t) != null ? turniGG.get(t): "///") +
                     "</td>" +
                     "</tr>" +
@@ -157,14 +204,14 @@ public class HTMLCalendar {
                 if (day<=monthDays) {
                     //week += "<td>" + String.valueOf(day) + "</td>" + "</tr>";
                     week += "<td align=\"center\">" +
-                            "<table>" +
+                            "<table onmouseup=\"releaseDay(this)\" onmousedown=\"pressDay(this)\"class=\"cal_calendar_cell\" >" +
                             "<tr>" +
-                            "<td align=\"right\">" +
+                            "<td style=\"font-weight: bold;;color:#303f9f;\" align=\"right\">" +
                             String.valueOf(day) +
                             "</td>" +
                             "</tr>" +
                             "<tr>" +
-                            "<td>" +
+                            "<td style=\"font-weight: bold;color:#e68a09;\">" +
                             (turniGG.get(day) != null ? turniGG.get(day): "///") +
                             "</td>" +
                             "</tr>" +
@@ -179,14 +226,14 @@ public class HTMLCalendar {
                 if (day<=monthDays) {
                     //week += "<td>" + String.valueOf(day) + "</td>";
                     week += "<td align=\"center\">" +
-                            "<table>" +
+                            "<table onmouseup=\"releaseDay(this)\" onmousedown=\"pressDay(this)\"class=\"cal_calendar_cell\" >" +
                             "<tr>" +
-                            "<td align=\"right\">" +
+                            "<td style=\"font-weight: bold;;color:#303f9f;\" align=\"right\">" +
                             String.valueOf(day) +
                             "</td>" +
                             "</tr>" +
                             "<tr>" +
-                            "<td>" +
+                            "<td style=\"font-weight: bold;color:#e68a09;\">" +
                             (turniGG.get(day) != null ? turniGG.get(day): "///") +
                             "</td>" +
                             "</tr>" +
@@ -206,14 +253,14 @@ public class HTMLCalendar {
         for (int k = 0; k<lastWeekDays; k++){
             //lastWeekTR += "<td>" + String.valueOf(lastDay+1) + "</td>";
             lastWeekTR += "<td align=\"center\">" +
-                    "<table>" +
+                    "<table onmouseup=\"releaseDay(this)\" onmousedown=\"pressDay(this)\"class=\"cal_calendar_cell\" >" +
                     "<tr>" +
-                    "<td align=\"right\">" +
+                    "<td style=\"font-weight: bold;;color:#303f9f;\" align=\"right\">" +
                     String.valueOf(lastDay+1) +
                     "</td>" +
                     "</tr>" +
                     "<tr>" +
-                    "<td>" +
+                    "<td style=\"font-weight: bold;color:#e68a09;\">" +
                     (turniGG.get(lastDay+1) != null ? turniGG.get(lastDay+1): "///") +
                     "</td>" +
                     "</tr>" +
@@ -232,141 +279,4 @@ public class HTMLCalendar {
     public String getHTML(){
         return this.HTML;
     }
-//
-//    public static String test(String turniJson){
-//        String HTMLTest = "<!DOCTYPE html>\n" +
-//                "<html>\n" +
-//                "    <head>\n" +
-//                "        <title>Javascript Calendar</title>\n" +
-//                "        <style>\n" +
-//                "            .cal_calendar\n" +
-//                "            {\n" +
-//                "                    border:1px solid black;\n" +
-//                "                    padding:1px;\n" +
-//                //"                    background-color:#4594ff;\n" +
-//                "                    width:300px;\n" +
-//                //"                    margin:auto;\n" +
-//                "                    height:246px;\n" +
-//                "                    background-image:url('http://www.webestools.com/ftp/ybouane/scripts_tutorials/javascript/calendar/bak-300-250.gif');\n" +
-//                "            }\n" +
-//                "            .cal_calendar th\n" +
-//                "            {\n" +
-//                "                    border:1px solid black;\n" +
-//                "                    background-color:#ffffff;\n" +
-//                "                            width:36px;\n" +
-//                "            }\n" +
-//                "            .cal_calendar td\n" +
-//                "            {\n" +
-//                "                    border:1px solid black;\n" +
-//                "                    background-color:#ffffff;\n" +
-//                "                    text-align:center;\n" +
-//                "                            width:36px;\n" +
-//                "                            height:36px;\n" +
-//                "            }\n" +
-//                "            .cal_today\n" +
-//                "            {\n" +
-//                "                    color:#ff0000;\n" +
-//                "                            font-weight:bold;\n" +
-//                "            }\n" +
-//                "            .cal_days_bef_aft\n" +
-//                "            {\n" +
-//                "                    color:#5a779e;\n" +
-//                "            }\n" +
-//                "        </style>        \n" +
-//                "        <script type=\"text/javascript\">\n" +
-//                "            function setStyle(id,style,value)\n" +
-//                "            {\n" +
-//                "                id.style[style] = value;\n" +
-//                "            }\n" +
-//                "            function opacity(el,opacity)\n" +
-//                "            {\n" +
-//                "                    setStyle(el,\"filter:\",\"alpha(opacity=\"+opacity+\")\");\n" +
-//                "                    setStyle(el,\"-moz-opacity\",opacity/100);\n" +
-//                "                    setStyle(el,\"-khtml-opacity\",opacity/100);\n" +
-//                "                    setStyle(el,\"opacity\",opacity/100);\n" +
-//                "            }\n" +
-//                "            function calendar(turni, day, month, year)\n" +
-//                "            {\n" +
-//                "                    var turniObj = JSON.parse(turni);\n" +
-//                "                    var date = new Date();\n" +
-//                "                    date.setMonth(month);\n" +
-//                "                    date.setYear(year);\n" +
-//                "                    date.setDate(day);\n" +
-//                "                    //var day = date.getDate();\n" +
-//                "                    //var month = date.getMonth();\n" +
-//                "                    //var year = date.getYear();\n" +
-//                "                    if(year<=200)\n" +
-//                "                    {\n" +
-//                "                            year += 1900;\n" +
-//                "                    }\n" +
-//                "                    months = new Array('January', 'February', 'March', 'April', 'May', 'June', 'Jully', 'August', 'September', 'October', 'November', 'December');\n" +
-//                "                    days_in_month = new Array(31,28,31,30,31,30,31,31,30,31,30,31);\n" +
-//                "                    if(year%4 == 0 && year!=1900)\n" +
-//                "                    {\n" +
-//                "                            days_in_month[1]=29;\n" +
-//                "                    }\n" +
-//                "                    total = days_in_month[month];\n" +
-//                "                    var date_today = day+' '+months[month]+' '+year;\n" +
-//                "                    beg_j = date;\n" +
-//                "                    beg_j.setDate(1);\n" +
-//                "                    if(beg_j.getDate()==2)\n" +
-//                "                    {\n" +
-//                "                            beg_j=setDate(0);\n" +
-//                "                    }\n" +
-//                "                    beg_j = beg_j.getDay();\n" +
-//                "                    document.write('<table class=\"cal_calendar\" onload=\"opacity(document.getElementById(\\'cal_body\\'),20);\"><tbody id=\"cal_body\"><tr><th colspan=\"7\">'+date_today+'</th></tr>');\n" +
-//                "                    document.write('<tr class=\"cal_d_weeks\"><th>DOM</th><th>LUN</th><th>MAR</th><th>MER</th><th>GIO</th><th>VEN</th><th>SAB</th></tr><tr>');\n" +
-//                "                    week = 0;\n" +
-//                "                    for(i=1;i<=beg_j;i++)\n" +
-//                "                    {\n" +
-//                "                            document.write('<td class=\"cal_days_bef_aft\">'+(days_in_month[month-1]-beg_j+i)+'</td>');\n" +
-//                "                            week++;\n" +
-//                "                    }\n" +
-//                "                    for(i=1;i<=total;i++)\n" +
-//                "                    {\n" +
-//                "                            if(week==0)\n" +
-//                "                            {\n" +
-//                "                                    document.write('<tr>');\n" +
-//                "                            }\n" +
-//                "                            if(day==i)\n" +
-//                "                            {\n" +
-//                "                                    document.write('<td class=\"cal_today\">' + i + '' + turniObj[i] + '</td>');\n" +
-//                "                            }\n" +
-//                "                            else\n" +
-//                "                            {\n" +
-//                "                                    document.write('<td>' + i + '<br/><b>' + turniObj[i] +'</b></td>');\n" +
-//                "                            }\n" +
-//                "                            week++;\n" +
-//                "                            if(week==7)\n" +
-//                "                            {\n" +
-//                "                                    document.write('</tr>');\n" +
-//                "                                    week=0;\n" +
-//                "                            }\n" +
-//                "                    }\n" +
-//                "                    for(i=1;week!=0;i++)\n" +
-//                "                    {\n" +
-//                "                            document.write('<td class=\"cal_days_bef_aft\">'+i+'</td>');\n" +
-//                "                            week++;\n" +
-//                "                            if(week==7)\n" +
-//                "                            {\n" +
-//                "                                    document.write('</tr>');\n" +
-//                "                                    week=0;\n" +
-//                "                            }\n" +
-//                "                    }\n" +
-//                "                    document.write('</tbody></table>');\n" +
-//                "                    opacity(document.getElementById('cal_body'),70);\n" +
-//                "                    return true;\n" +
-//                "            }        \n" +
-//                "        </script>\n" +
-//                "    </head>\n" +
-//                "    <body>\n" +
-//                "        <script type=\"text/javascript\">";
-//
-//        HTMLTest += "calendar(' {'1':'412','2':'567'} ', 20, 4, 2016);";
-//        //HTMLTest += "calendar('"  + turniJson + "', 20, 4, 2016);";
-//        HTMLTest += "        </script>\n" +
-//                "    </body>\n" +
-//                "</html>";
-//        return HTMLTest;
-//    }
 }

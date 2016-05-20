@@ -109,6 +109,10 @@ public class MiscUtils {
 
             while(turniMese.size()<(daysInMonth)){
                 turnoWeek = db.getTurnoByPos(String.valueOf(curPos));
+                if (turnoWeek == null){
+                    curPos = 0;
+                    turnoWeek = db.getTurnoByPos(String.valueOf(curPos));
+                }
                 for (int t = 0;t<turnoWeek.length; t++){
                     turniMese.add(turnoWeek[t]);
                 }
