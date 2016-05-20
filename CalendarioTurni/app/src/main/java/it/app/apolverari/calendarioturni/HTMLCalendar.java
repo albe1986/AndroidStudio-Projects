@@ -54,10 +54,9 @@ public class HTMLCalendar {
                                         "<script type=\"text/javascript\">\n" +
                                         "    function pressDay(obj){\n" +
                                         "        obj.setAttribute(\"style\", \"border-style:inset\");\n" +
-                                        "    }\n" +
-                                        "    \n" +
-                                        "    function releaseDay(obj){\n" +
-                                        "        obj.setAttribute(\"style\", \"border-style:outset\");\n" +
+                                        "        setInterval(function(obj){\n" +
+                                        "            obj.setAttribute(\"style\", \"border-style:outset\");\n" +
+                                        "        }, 1000);" +
                                         "    }\n" +
                                         "</script>";
     private String HTML = "";
@@ -176,7 +175,7 @@ public class HTMLCalendar {
         for (int t = 1; t<8-blankDays; t++){
             //firstWeekTR += "<td>" + String.valueOf(t) + "</td>";
             firstWeekTR += "<td align=\"center\">" +
-                    "<table onmouseup=\"releaseDay(this)\" onmousedown=\"pressDay(this)\"class=\"cal_calendar_cell\" >" +
+                    "<table onclick=\"pressDay(this)\"class=\"cal_calendar_cell\" >" +
                     "<tr>" +
                     "<td style=\"font-weight: bold;;color:#303f9f;\" align=\"right\">" +
                     String.valueOf(t) +
@@ -204,7 +203,7 @@ public class HTMLCalendar {
                 if (day<=monthDays) {
                     //week += "<td>" + String.valueOf(day) + "</td>" + "</tr>";
                     week += "<td align=\"center\">" +
-                            "<table onmouseup=\"releaseDay(this)\" onmousedown=\"pressDay(this)\"class=\"cal_calendar_cell\" >" +
+                            "<table onclick=\"pressDay(this)\"class=\"cal_calendar_cell\" >" +
                             "<tr>" +
                             "<td style=\"font-weight: bold;;color:#303f9f;\" align=\"right\">" +
                             String.valueOf(day) +
@@ -226,7 +225,7 @@ public class HTMLCalendar {
                 if (day<=monthDays) {
                     //week += "<td>" + String.valueOf(day) + "</td>";
                     week += "<td align=\"center\">" +
-                            "<table onmouseup=\"releaseDay(this)\" onmousedown=\"pressDay(this)\"class=\"cal_calendar_cell\" >" +
+                            "<table onclick=\"pressDay(this)\"class=\"cal_calendar_cell\" >" +
                             "<tr>" +
                             "<td style=\"font-weight: bold;;color:#303f9f;\" align=\"right\">" +
                             String.valueOf(day) +
@@ -253,7 +252,7 @@ public class HTMLCalendar {
         for (int k = 0; k<lastWeekDays; k++){
             //lastWeekTR += "<td>" + String.valueOf(lastDay+1) + "</td>";
             lastWeekTR += "<td align=\"center\">" +
-                    "<table onmouseup=\"releaseDay(this)\" onmousedown=\"pressDay(this)\"class=\"cal_calendar_cell\" >" +
+                    "<table onclick=\"pressDay(this)\"class=\"cal_calendar_cell\" >" +
                     "<tr>" +
                     "<td style=\"font-weight: bold;;color:#303f9f;\" align=\"right\">" +
                     String.valueOf(lastDay+1) +

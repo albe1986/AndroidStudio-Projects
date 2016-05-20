@@ -59,14 +59,14 @@ public class TurniActivity extends AppCompatActivity {
         HTML = MiscUtils.calcolaTurni(db, agente, turniAgente, months.get(bmonth), bday);
 
         calendarioHTML = (WebView) findViewById(R.id.calendarioHTML);
-        calendarioHTML.setWebViewClient(new WebViewClient());
-        //calendarioHTML.setWebChromeClient(new WebChromeClient());
+        //calendarioHTML.setWebViewClient(new WebViewClient());
+
         calendarioHTML.getSettings().setJavaScriptEnabled(true);
         //calendarioHTML.loadData(HTML, "text/html", "utf-8");
         calendarioHTML.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         calendarioHTML.getSettings().setDomStorageEnabled(true);
-        calendarioHTML.loadDataWithBaseURL("blarg://ignored", HTML, "text/html", "utf-8", "");
-
+        calendarioHTML.setWebChromeClient(new WebChromeClient());
+        calendarioHTML.loadDataWithBaseURL("fake://fake.com", HTML, "text/html", "utf-8", "");
     }
 
 
