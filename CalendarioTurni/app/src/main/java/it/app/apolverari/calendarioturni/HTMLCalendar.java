@@ -53,9 +53,11 @@ public class HTMLCalendar {
                                         "</head>\n" +
                                         "<script type=\"text/javascript\">\n" +
                                         "    function pressDay(obj){\n" +
+                                        "        var agente = document.getElementById(\"agente\").value;\n" +
+                                        "        var month = document.getElementById(\"month\").value;" +
                                         "        var day = obj.getElementsByTagName(\"td\")[0].innerHTML;\n" +
                                         "        var turno = obj.getElementsByTagName(\"td\")[1].innerHTML;\n" +
-                                        "        window.JSInterface.editTurno(day, turno);\n" +
+                                        "        window.JSInterface.editTurno(agente, month, day, turno);\n" +
                                         "    }" +
                                         "</script>";
     private String HTML = "";
@@ -136,8 +138,10 @@ public class HTMLCalendar {
         months.put("Dicembre", 11);
     }
 
-    public void generateHTML(HashMap<Integer, String> turniGG){
-        HTML = openHTML + header;
+    public void generateHTML(HashMap<Integer, String> turniGG, String agente){
+        String agenteHiddenInput = "<input id=\"agente\" type=\"hidden\" value=\"" + agente + "\" />\n";
+        String monthHiddenInput = "<input id=\"month\" type=\"hidden\" value=" + months.get(this.month) + " />";
+        HTML = openHTML + agenteHiddenInput + monthHiddenInput + header;
         HTML += table;
         Integer blankDays;
         switch (firstDayOfWeek) {

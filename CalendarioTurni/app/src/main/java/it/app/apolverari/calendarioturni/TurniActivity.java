@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.IntegerRes;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -109,10 +110,12 @@ class JavaScriptInterface {
         this.activity = activiy;
     }
     @JavascriptInterface
-    public void editTurno(String day, String turno){
+    public void editTurno(String agente, Integer month, String day, String turno){
         Intent intent = new Intent(activity.getApplicationContext(), EditTurno.class);
         intent.putExtra("day", day);
         intent.putExtra("turno", turno);
+        intent.putExtra("agente", agente);
+        intent.putExtra("month", month);
         activity.startActivity(intent);
     }
 }

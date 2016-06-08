@@ -106,7 +106,7 @@ public class MiscUtils {
             if (jsonHash != null && jsonHash != ""){
                 HTMLCalendar c = new HTMLCalendar(mesi[month], 2016);
                 turniGiorni = gson.fromJson(jsonHash, type);
-                c.generateHTML(turniGiorni);
+                c.generateHTML(turniGiorni, agente);
                 HTML += c.getHTML();
                 month++;
                 continue;
@@ -175,10 +175,14 @@ public class MiscUtils {
             HTMLCalendar c = new HTMLCalendar(mesi[month], 2016);
             String turniJson = gson.toJson(turniGiorni);
             db.saveTurniHash(turniJson, agente, month, 2016);
-            c.generateHTML(turniGiorni);
+            c.generateHTML(turniGiorni, agente);
             HTML += c.getHTML();
             month++;
         }
         return HTML;
+    }
+
+    public static void updateAndReloadTurni(String agente, String month, String day, String turno){
+
     }
 }

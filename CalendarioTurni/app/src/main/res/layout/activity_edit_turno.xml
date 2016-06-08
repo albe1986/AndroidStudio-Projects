@@ -25,7 +25,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editText"
+        android:id="@+id/editTurno"
         android:layout_below="@+id/editTitle"
         android:layout_alignLeft="@+id/editTitle"
         android:layout_alignStart="@+id/editTitle"
@@ -47,9 +47,9 @@
         android:textSize="20dp"
         android:textStyle="bold"
         android:textColor="@color/colorPrimaryDark"
-        android:layout_alignBottom="@+id/editText"
-        android:layout_toLeftOf="@+id/editText"
-        android:layout_toStartOf="@+id/editText"
+        android:layout_alignBottom="@+id/editTurno"
+        android:layout_toLeftOf="@+id/editTurno"
+        android:layout_toStartOf="@+id/editTurno"
         android:gravity="center" />
 
     <TextView
@@ -65,14 +65,14 @@
         android:layout_below="@+id/textView2"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/editText2"
-        android:layout_toStartOf="@+id/editText2" />
+        android:layout_toLeftOf="@+id/editNote"
+        android:layout_toStartOf="@+id/editNote" />
 
     <EditText
         style="@style/spinner_textview"
         android:layout_width="wrap_content"
         android:layout_height="250px"
-        android:id="@+id/editText2"
+        android:id="@+id/editNote"
         android:layout_alignTop="@+id/textView3"
         android:layout_toRightOf="@+id/textView2"
         android:gravity="left"
@@ -83,11 +83,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Salva"
-        android:id="@+id/button"
+        android:id="@+id/editSave"
         android:layout_marginTop="54dp"
-        android:layout_below="@+id/editText2"
-        android:layout_alignRight="@+id/editText"
-        android:layout_alignEnd="@+id/editText"
-        android:layout_alignLeft="@+id/editText2"
-        android:layout_alignStart="@+id/editText2" />
+        android:layout_below="@+id/editNote"
+        android:layout_alignRight="@+id/editTurno"
+        android:layout_alignEnd="@+id/editTurno"
+        android:layout_alignLeft="@+id/editNote"
+        android:layout_alignStart="@+id/editNote" />
 </RelativeLayout>
