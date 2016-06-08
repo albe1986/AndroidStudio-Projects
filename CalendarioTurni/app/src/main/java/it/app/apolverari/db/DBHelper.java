@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "CALENDARIO_TURNI";
-    public static final String TABLE_NAME = "TURNI";
+    public static final String TABLE_TURNI_NAME = "TURNI";
     public static final String FIELD_ID = "ID";
     public static final String FIELD_POS = "POS";
     public static final String FIELD_AGE = "AGE";
@@ -23,7 +23,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String FIELD_DOM = "DOM";
     public static final String FIELD_DIN = "DAT_INI";
     private static final String CREATE_QUERY =
-            "CREATE TABLE " + TABLE_NAME + " (" +
+            "CREATE TABLE " + TABLE_TURNI_NAME + " (" +
                     FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     FIELD_POS + " TEXT UNIQUE, " +
                     FIELD_AGE + " TEXT UNIQUE, " +
@@ -36,6 +36,19 @@ public class DBHelper extends SQLiteOpenHelper {
                     FIELD_DOM + " TEXT, " +
                     FIELD_DIN + " TEXT " + ");";
 
+    public static final String TABLE_HASH_NAME = "TurnoAgente";
+    public static final String FIELD_ANN = "ANN";
+    public static final String FIELD_MES = "MES";
+    public static final String FIELD_HASH_MAP = "HSH";
+
+    private static final String CREATE_QUERY_2 =
+            "CREATE TABLE " + TABLE_HASH_NAME + " (" +
+                    FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    FIELD_AGE + " TEXT, " +
+                    FIELD_ANN + " INTEGER, " +
+                    FIELD_MES + " INTEGER, " +
+                    FIELD_HASH_MAP + " TEXT " + ");";
+
     public DBHelper(Context context) {
         super(context, DB_NAME, null, 1);
     }
@@ -43,6 +56,7 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_QUERY);
+        db.execSQL(CREATE_QUERY_2);
     }
 
     @Override

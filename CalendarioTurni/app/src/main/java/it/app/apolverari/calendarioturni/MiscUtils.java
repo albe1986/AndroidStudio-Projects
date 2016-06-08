@@ -2,6 +2,8 @@ package it.app.apolverari.calendarioturni;
 
 import android.content.Context;
 
+import com.google.gson.Gson;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -85,6 +87,7 @@ public class MiscUtils {
             String agente, ArrayList<String> turniAgente, Integer month, Integer bday){
 
         String HTML = "";
+        Gson gson = new Gson();
         Integer daysInMonth = 0;
         String[] turnoWeek = null;
         HashMap<Integer, ArrayList<String>> parzialiMesi = new HashMap<>();
@@ -95,10 +98,19 @@ public class MiscUtils {
 
         int monthsToShow = 12-month;
         for (int m = 0; m<monthsToShow; m++){
+            HashMap<Integer, String> turniGiorni = new HashMap<>();
+            String jsonHash = db.getTurnoMeseHash(agente, month, 2016);
+//            if (jsonHash != null && jsonHash != ""){
+//                HTMLCalendar c = new HTMLCalendar(mesi[month], 2016);
+//                turniGiorni = gson.fromJson(jsonHash, HashMap.class);
+//                c.generateHTML(turniGiorni);
+//                HTML += c.getHTML();
+//                month++;
+//                continue;
+//            }
             gc.set(2016, month, bday);
             daysInMonth = gc.getActualMaximum(Calendar.DAY_OF_MONTH);
             ArrayList<String> turniMese = new ArrayList<>();
-            HashMap<Integer, String> turniGiorni = new HashMap<>();
 
             int partSize = 0;
             int n = 1;
@@ -158,9 +170,10 @@ public class MiscUtils {
             }
 
             HTMLCalendar c = new HTMLCalendar(mesi[month], 2016);
+            String turniJson = gson.toJson(turniGiorni);
+            db.saveTurniHash(turniJson, agente, month, 2016);
             c.generateHTML(turniGiorni);
             HTML += c.getHTML();
-
             month++;
         }
         return HTML;

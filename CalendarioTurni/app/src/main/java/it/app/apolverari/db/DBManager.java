@@ -33,20 +33,7 @@ public class DBManager {
         cv.put(DBHelper.FIELD_DOM, turniAgente.get(7));
         cv.put(DBHelper.FIELD_DIN, dataInizio);
         try {
-            db.replace(DBHelper.TABLE_NAME, null, cv);
-        } catch (SQLiteException e){
-            return false;
-        } finally {
-            db.close();
-        }
-        return true;
-    }
-
-    public boolean delete(String agente, String dataInizio, String note){
-        String id = "";
-        SQLiteDatabase db = dbhelper.getWritableDatabase();
-        try {
-            int recordDeleted = db.delete(DBHelper.TABLE_NAME, DBHelper.FIELD_ID + "=?", new String[]{id});
+            db.replace(DBHelper.TABLE_TURNI_NAME, null, cv);
         } catch (SQLiteException e){
             return false;
         } finally {
@@ -60,7 +47,7 @@ public class DBManager {
         SQLiteDatabase db = null;
         try {
             db = dbhelper.getReadableDatabase();
-            crs = db.query(DBHelper.TABLE_NAME, null, null, null, null, null, DBHelper.FIELD_AGE, null);
+            crs = db.query(DBHelper.TABLE_TURNI_NAME, null, null, null, null, null, DBHelper.FIELD_AGE, null);
         } catch (SQLiteException e){
             return null;
         }
@@ -73,7 +60,7 @@ public class DBManager {
         SQLiteDatabase db = null;
         try {
             db = dbhelper.getReadableDatabase();
-            crs = db.rawQuery("SELECT * FROM " + DBHelper.TABLE_NAME +
+            crs = db.rawQuery("SELECT * FROM " + DBHelper.TABLE_TURNI_NAME +
                     " WHERE " + DBHelper.FIELD_AGE + " = '" + agente + "'", null);
             if (crs.moveToFirst()) {
                 pos = crs.getString(1);
@@ -92,7 +79,7 @@ public class DBManager {
         SQLiteDatabase db = null;
         try {
             db = dbhelper.getReadableDatabase();
-            crs = db.rawQuery("SELECT * FROM " + DBHelper.TABLE_NAME +
+            crs = db.rawQuery("SELECT * FROM " + DBHelper.TABLE_TURNI_NAME +
                     " WHERE " + DBHelper.FIELD_POS + " = '" + pos + "'", null);
             if (crs.moveToFirst()) {
                 turni[0] = crs.getString(3);
@@ -113,5 +100,43 @@ public class DBManager {
             db.close();
         }
         return turni;
+    }
+
+    public boolean saveTurniHash(String turniAgente, String agente, Integer mese, Integer anno){
+        SQLiteDatabase db = dbhelper.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(DBHelper.FIELD_AGE, agente);
+        cv.put(DBHelper.FIELD_ANN, anno);
+        cv.put(DBHelper.FIELD_MES, mese);
+        cv.put(DBHelper.FIELD_HASH_MAP, turniAgente);
+        try {
+            db.replace(DBHelper.TABLE_HASH_NAME, null, cv);
+        } catch (SQLiteException e){
+            return false;
+        } finally {
+            db.close();
+        }
+        return true;
+    }
+
+    public String getTurnoMeseHash(String agente, Integer mese, Integer anno){
+        Cursor crs = null;
+        String turniJson = "";
+        SQLiteDatabase db = null;
+        try {
+            db = dbhelper.getReadableDatabase();
+            crs = db.rawQuery("SELECT * FROM " + DBHelper.TABLE_HASH_NAME +
+                    " WHERE " + DBHelper.FIELD_AGE + " = '" + agente + "'" +
+                    " AND " + DBHelper.FIELD_MES + " = " + mese +
+                    " AND " + DBHelper.FIELD_ANN + " = " + anno, null);
+            if (crs.moveToFirst()) {
+                turniJson = crs.getString(4);
+            }
+        } catch (SQLiteException e){
+        } finally {
+            crs.close();
+            db.close();
+        }
+        return turniJson;
     }
 }

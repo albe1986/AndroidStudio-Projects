@@ -168,21 +168,27 @@ public class HTMLCalendar {
         }
 
         String firstWeekTR = "<tr>";
-
+        String turnoCol = "#e68a09;";
         for (int i = 0; i<blankDays; i++){
             firstWeekTR += "<td></td>";
         }
         for (int t = 1; t<8-blankDays; t++){
-            //firstWeekTR += "<td>" + String.valueOf(t) + "</td>";
+            if (turniGG.get(t) != null){
+                if (turniGG.get(t).equals("R")) {
+                    turnoCol = "#FF0000;";
+                } else {
+                    turnoCol = "#e68a09;";
+                }
+            }
             firstWeekTR += "<td align=\"center\">" +
                     "<table onclick=\"pressDay(this)\"class=\"cal_calendar_cell\" >" +
                     "<tr>" +
-                    "<td style=\"font-weight: bold;;color:#303f9f;\" align=\"right\">" +
+                    "<td style=\"font-weight: bold;color:#303f9f;\" align=\"right\">" +
                     String.valueOf(t) +
                     "</td>" +
                     "</tr>" +
                     "<tr>" +
-                    "<td style=\"font-weight: bold;color:#e68a09;\">" +
+                    "<td style=\"font-weight: bold;color:" + turnoCol + "\">" +
                     (turniGG.get(t) != null ? turniGG.get(t): "///") +
                     "</td>" +
                     "</tr>" +
@@ -201,7 +207,13 @@ public class HTMLCalendar {
             }
             if (j == 6 || j == 13 || j == 20 || j == 27){
                 if (day<=monthDays) {
-                    //week += "<td>" + String.valueOf(day) + "</td>" + "</tr>";
+                    if (turniGG.get(day) != null){
+                        if (turniGG.get(day).equals("R")) {
+                            turnoCol = "#FF0000;";
+                        } else {
+                            turnoCol = "#e68a09;";
+                        }
+                    }
                     week += "<td align=\"center\">" +
                             "<table onclick=\"pressDay(this)\"class=\"cal_calendar_cell\" >" +
                             "<tr>" +
@@ -210,7 +222,7 @@ public class HTMLCalendar {
                             "</td>" +
                             "</tr>" +
                             "<tr>" +
-                            "<td style=\"font-weight: bold;color:#e68a09;\">" +
+                            "<td style=\"font-weight: bold;color:" + turnoCol + "\">" +
                             (turniGG.get(day) != null ? turniGG.get(day): "///") +
                             "</td>" +
                             "</tr>" +
@@ -223,7 +235,13 @@ public class HTMLCalendar {
                 if (j==27) lastDay = day;
             } else {
                 if (day<=monthDays) {
-                    //week += "<td>" + String.valueOf(day) + "</td>";
+                    if (turniGG.get(day) != null){
+                        if (turniGG.get(day).equals("R")) {
+                            turnoCol = "#FF0000;";
+                        } else {
+                            turnoCol = "#e68a09;";
+                        }
+                    }
                     week += "<td align=\"center\">" +
                             "<table onclick=\"pressDay(this)\"class=\"cal_calendar_cell\" >" +
                             "<tr>" +
@@ -232,7 +250,7 @@ public class HTMLCalendar {
                             "</td>" +
                             "</tr>" +
                             "<tr>" +
-                            "<td style=\"font-weight: bold;color:#e68a09;\">" +
+                            "<td style=\"font-weight: bold;color:" + turnoCol + "\">" +
                             (turniGG.get(day) != null ? turniGG.get(day): "///") +
                             "</td>" +
                             "</tr>" +
@@ -241,16 +259,19 @@ public class HTMLCalendar {
                     week += "<td></td>";
                 }
             }
-//            if (day<monthDays) {
-//                day++;
-//            }
             day++;
         }
 
         String lastWeekTR = "<tr>";
         int lastWeekDays = monthDays - lastDay;
         for (int k = 0; k<lastWeekDays; k++){
-            //lastWeekTR += "<td>" + String.valueOf(lastDay+1) + "</td>";
+            if (turniGG.get(lastDay+1) != null){
+                if (turniGG.get(lastDay+1).equals("R")) {
+                    turnoCol = "#FF0000;";
+                } else {
+                    turnoCol = "#e68a09;";
+                }
+            }
             lastWeekTR += "<td align=\"center\">" +
                     "<table onclick=\"pressDay(this)\"class=\"cal_calendar_cell\" >" +
                     "<tr>" +
@@ -259,7 +280,7 @@ public class HTMLCalendar {
                     "</td>" +
                     "</tr>" +
                     "<tr>" +
-                    "<td style=\"font-weight: bold;color:#e68a09;\">" +
+                    "<td style=\"font-weight: bold;color:" + turnoCol + "\">" +
                     (turniGG.get(lastDay+1) != null ? turniGG.get(lastDay+1): "///") +
                     "</td>" +
                     "</tr>" +
