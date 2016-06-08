@@ -3,9 +3,11 @@ package it.app.apolverari.calendarioturni;
 import android.content.Context;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -100,14 +102,15 @@ public class MiscUtils {
         for (int m = 0; m<monthsToShow; m++){
             HashMap<Integer, String> turniGiorni = new HashMap<>();
             String jsonHash = db.getTurnoMeseHash(agente, month, 2016);
-//            if (jsonHash != null && jsonHash != ""){
-//                HTMLCalendar c = new HTMLCalendar(mesi[month], 2016);
-//                turniGiorni = gson.fromJson(jsonHash, HashMap.class);
-//                c.generateHTML(turniGiorni);
-//                HTML += c.getHTML();
-//                month++;
-//                continue;
-//            }
+            Type type = new TypeToken<HashMap<Integer, String>>(){}.getType();
+            if (jsonHash != null && jsonHash != ""){
+                HTMLCalendar c = new HTMLCalendar(mesi[month], 2016);
+                turniGiorni = gson.fromJson(jsonHash, type);
+                c.generateHTML(turniGiorni);
+                HTML += c.getHTML();
+                month++;
+                continue;
+            }
             gc.set(2016, month, bday);
             daysInMonth = gc.getActualMaximum(Calendar.DAY_OF_MONTH);
             ArrayList<String> turniMese = new ArrayList<>();

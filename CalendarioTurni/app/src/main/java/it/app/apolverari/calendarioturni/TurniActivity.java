@@ -1,10 +1,14 @@
 package it.app.apolverari.calendarioturni;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -27,6 +31,7 @@ public class TurniActivity extends AppCompatActivity {
     private HashMap<String, Integer> months = new HashMap<>();
     private ArrayList<String> turniAgente = new ArrayList<>();
 
+    @SuppressLint("JavascriptInterface")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,10 +62,12 @@ public class TurniActivity extends AppCompatActivity {
         }
 
         HTML = MiscUtils.calcolaTurni(db, agente, turniAgente, months.get(bmonth), bday);
-
+        JavaScriptInterface jsInterface = new JavaScriptInterface(this);
         calendarioHTML = (WebView) findViewById(R.id.calendarioHTML);
         calendarioHTML.getSettings().setJavaScriptEnabled(true);
         calendarioHTML.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+        calendarioHTML.getSettings().setJavaScriptEnabled(true);
+        calendarioHTML.addJavascriptInterface(jsInterface, "JSInterface");
         calendarioHTML.getSettings().setDomStorageEnabled(true);
         calendarioHTML.setWebChromeClient(new WebChromeClient());
         calendarioHTML.loadDataWithBaseURL("fake://fake.com", HTML, "text/html", "utf-8", "");
@@ -92,5 +99,20 @@ public class TurniActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+}
+
+class JavaScriptInterface {
+    private Activity activity;
+
+    public JavaScriptInterface(Activity activiy) {
+        this.activity = activiy;
+    }
+    @JavascriptInterface
+    public void editTurno(String day, String turno){
+        Intent intent = new Intent(activity.getApplicationContext(), EditTurno.class);
+        intent.putExtra("day", day);
+        intent.putExtra("turno", turno);
+        activity.startActivity(intent);
     }
 }

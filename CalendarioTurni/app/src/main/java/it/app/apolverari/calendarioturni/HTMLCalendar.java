@@ -53,11 +53,10 @@ public class HTMLCalendar {
                                         "</head>\n" +
                                         "<script type=\"text/javascript\">\n" +
                                         "    function pressDay(obj){\n" +
-                                        "        obj.setAttribute(\"style\", \"border-style:inset\");\n" +
-                                        "        setInterval(function(obj){\n" +
-                                        "            obj.setAttribute(\"style\", \"border-style:outset\");\n" +
-                                        "        }, 1000);" +
-                                        "    }\n" +
+                                        "        var day = obj.getElementsByTagName(\"td\")[0].innerHTML;\n" +
+                                        "        var turno = obj.getElementsByTagName(\"td\")[1].innerHTML;\n" +
+                                        "        window.JSInterface.editTurno(day, turno);\n" +
+                                        "    }" +
                                         "</script>";
     private String HTML = "";
     private String openHTML =   "<html>" +
