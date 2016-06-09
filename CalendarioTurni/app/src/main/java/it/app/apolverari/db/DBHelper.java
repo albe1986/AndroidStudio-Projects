@@ -49,6 +49,19 @@ public class DBHelper extends SQLiteOpenHelper {
                     FIELD_MES + " INTEGER, " +
                     FIELD_HASH_MAP + " TEXT " + ");";
 
+    public static final String TABLE_NOTE_NAME = "NoteTurno";
+    public static final String FIELD_GGG = "GGG";
+    public static final String FIELD_TUR = "TUR";
+    public static final String FIELD_NTT = "NTT";
+    private static final String CREATE_QUERY_3 =
+            "CREATE TABLE " + TABLE_NOTE_NAME + " (" +
+                    FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    FIELD_AGE + " TEXT, " +
+                    FIELD_TUR + " TEXT, " +
+                    FIELD_GGG + " INTEGER, " +
+                    FIELD_MES + " INTEGER, " +
+                    FIELD_NTT + " TEXT " + ");";
+
     public DBHelper(Context context) {
         super(context, DB_NAME, null, 1);
     }
@@ -57,6 +70,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_QUERY);
         db.execSQL(CREATE_QUERY_2);
+        db.execSQL(CREATE_QUERY_3);
     }
 
     @Override

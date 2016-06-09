@@ -140,7 +140,7 @@ public class HTMLCalendar {
 
     public void generateHTML(HashMap<Integer, String> turniGG, String agente){
         String agenteHiddenInput = "<input id=\"agente\" type=\"hidden\" value=\"" + agente + "\" />\n";
-        String monthHiddenInput = "<input id=\"month\" type=\"hidden\" value=" + months.get(this.month) + " />";
+        String monthHiddenInput = "<input id=\"month\" type=\"hidden\" value=" + String.valueOf(months.get(this.month)) + " />";
         HTML = openHTML + agenteHiddenInput + monthHiddenInput + header;
         HTML += table;
         Integer blankDays;

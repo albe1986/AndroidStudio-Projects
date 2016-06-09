@@ -94,7 +94,7 @@ public class MiscUtils {
         String[] turnoWeek = null;
         HashMap<Integer, ArrayList<String>> parzialiMesi = new HashMap<>();
         ArrayList<String> turnoParziale = new ArrayList<>();
-
+        Type type = new TypeToken<HashMap<Integer, String>>(){}.getType();
         Integer curPos = Integer.parseInt(db.getPosAgente(agente));
         GregorianCalendar gc = new GregorianCalendar();
 
@@ -102,7 +102,6 @@ public class MiscUtils {
         for (int m = 0; m<monthsToShow; m++){
             HashMap<Integer, String> turniGiorni = new HashMap<>();
             String jsonHash = db.getTurnoMeseHash(agente, month, 2016);
-            Type type = new TypeToken<HashMap<Integer, String>>(){}.getType();
             if (jsonHash != null && jsonHash != ""){
                 HTMLCalendar c = new HTMLCalendar(mesi[month], 2016);
                 turniGiorni = gson.fromJson(jsonHash, type);
@@ -182,7 +181,31 @@ public class MiscUtils {
         return HTML;
     }
 
-    public static void updateAndReloadTurni(String agente, String month, String day, String turno){
+    public static String updateAndReloadTurni(DBManager db, String agente, Integer month,
+                                              Integer curMonth, String day, String turno){
 
+        String HTML = "";
+        Gson gson = new Gson();
+        int monthsToShow = 12-curMonth;
+        Type type = new TypeToken<HashMap<Integer, String>>() {}.getType();
+        String updateHash = db.getTurnoMeseHash(agente, month, 2016);
+        HashMap<Integer, String> updTurno = gson.fromJson(updateHash, type);
+        updTurno.put(Integer.valueOf(day), turno);
+        String updateJsonHash = gson.toJson(updTurno);
+        db.updateTurniHash(updateJsonHash, agente, month, 2016);
+        for (int m = 0; m<monthsToShow; m++) {
+            HashMap<Integer, String> turniGiorni = new HashMap<>();
+            String jsonHash = db.getTurnoMeseHash(agente, curMonth, 2016);
+            if (jsonHash != null && jsonHash != "") {
+                HTMLCalendar c = new HTMLCalendar(mesi[curMonth], 2016);
+                turniGiorni = gson.fromJson(jsonHash, type);
+                c.generateHTML(turniGiorni, agente);
+                HTML += c.getHTML();
+                curMonth++;
+                continue;
+            }
+        }
+
+        return HTML;
     }
 }

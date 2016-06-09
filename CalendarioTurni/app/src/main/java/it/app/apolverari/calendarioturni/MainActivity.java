@@ -153,6 +153,7 @@ public class MainActivity extends AppCompatActivity
                 i.putExtra("day", day);
                 i.putExtra("month", month);
                 i.putExtra("year", year);
+                i.putExtra("activity", "Main");
                 startActivity(i);
             }
         });

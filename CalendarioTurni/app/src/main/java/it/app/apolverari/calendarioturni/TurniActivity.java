@@ -53,16 +53,20 @@ public class TurniActivity extends AppCompatActivity {
         months.put("Novembre", 10);
         months.put("Dicembre", 11);
         Intent i = getIntent();
-        Bundle bundle = i.getExtras();
-        if (bundle != null) {
-            agente = i.getStringExtra("agente");
-            turniAgente = (ArrayList<String>) bundle.getSerializable("turniAgente");
-            bday = i.getIntExtra("day", 0);
-            bmonth = i.getStringExtra("month");
-            byear = i.getIntExtra("year", 0);
+        String activity = i.getStringExtra("activity");
+        if (activity.equals("Main")) {
+            Bundle bundle = i.getExtras();
+            if (bundle != null) {
+                agente = i.getStringExtra("agente");
+                turniAgente = (ArrayList<String>) bundle.getSerializable("turniAgente");
+                bday = i.getIntExtra("day", 0);
+                bmonth = i.getStringExtra("month");
+                byear = i.getIntExtra("year", 0);
+            }
+            HTML = MiscUtils.calcolaTurni(db, agente, turniAgente, months.get(bmonth), bday);
+        } else if (activity.equals("Edit")){
+            HTML = i.getStringExtra("HTML");
         }
-
-        HTML = MiscUtils.calcolaTurni(db, agente, turniAgente, months.get(bmonth), bday);
         JavaScriptInterface jsInterface = new JavaScriptInterface(this);
         calendarioHTML = (WebView) findViewById(R.id.calendarioHTML);
         calendarioHTML.getSettings().setJavaScriptEnabled(true);
@@ -110,12 +114,13 @@ class JavaScriptInterface {
         this.activity = activiy;
     }
     @JavascriptInterface
-    public void editTurno(String agente, Integer month, String day, String turno){
+    public void editTurno(String agente, String month, String day, String turno){
         Intent intent = new Intent(activity.getApplicationContext(), EditTurno.class);
         intent.putExtra("day", day);
         intent.putExtra("turno", turno);
         intent.putExtra("agente", agente);
         intent.putExtra("month", month);
         activity.startActivity(intent);
+        activity.finish();
     }
 }

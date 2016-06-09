@@ -119,6 +119,22 @@ public class DBManager {
         return true;
     }
 
+    public boolean updateTurniHash(String turniAgente, String agente, Integer mese, Integer anno){
+        SQLiteDatabase db = dbhelper.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(DBHelper.FIELD_HASH_MAP, turniAgente);
+        try {
+            db.update(DBHelper.TABLE_HASH_NAME, cv, DBHelper.FIELD_AGE + " = '" + agente +
+                        "' AND " + DBHelper.FIELD_ANN + " = " + anno +
+                        "  AND " + DBHelper.FIELD_MES + " = " + mese, null );
+        } catch (SQLiteException e){
+            return false;
+        } finally {
+            db.close();
+        }
+        return true;
+    }
+
     public String getTurnoMeseHash(String agente, Integer mese, Integer anno){
         Cursor crs = null;
         String turniJson = "";
@@ -139,4 +155,45 @@ public class DBManager {
         }
         return turniJson;
     }
+
+    public boolean saveNote(String agente, String turno, Integer day, Integer mese, String note){
+        SQLiteDatabase db = dbhelper.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(DBHelper.FIELD_AGE, agente);
+        cv.put(DBHelper.FIELD_TUR, turno);
+        cv.put(DBHelper.FIELD_GGG, day);
+        cv.put(DBHelper.FIELD_MES, mese);
+        cv.put(DBHelper.FIELD_NTT, note);
+        try {
+            db.replace(DBHelper.TABLE_NOTE_NAME, null, cv);
+        } catch (SQLiteException e){
+            return false;
+        } finally {
+            db.close();
+        }
+        return true;
+    }
+
+    public String getNote(String agente, String turno, Integer day, Integer mese){
+        Cursor crs = null;
+        String note = "";
+        SQLiteDatabase db = null;
+        try {
+            db = dbhelper.getReadableDatabase();
+            crs = db.rawQuery("SELECT * FROM " + DBHelper.TABLE_NOTE_NAME +
+                    " WHERE " + DBHelper.FIELD_AGE + " = '" + agente + "'" +
+                    " AND " + DBHelper.FIELD_TUR + " = '" + turno + "'" +
+                    " AND " + DBHelper.FIELD_GGG + " = " + day +
+                    " AND " + DBHelper.FIELD_MES + " = " + mese, null);
+            if (crs.moveToFirst()) {
+                note = crs.getString(5);
+            }
+        } catch (SQLiteException e){
+        } finally {
+            crs.close();
+            db.close();
+        }
+        return note;
+    }
+
 }
